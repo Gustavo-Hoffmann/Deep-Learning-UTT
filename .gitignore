@@ -1,0 +1,21 @@
+# Ambiente Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Dependências locais / cache
+.deps/
+.mplconfig/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Saídas geradas (podem ser recriadas pelo pipeline)
+outputs/

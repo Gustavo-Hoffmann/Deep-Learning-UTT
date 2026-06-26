@@ -1,0 +1,304 @@
+[2026-06-23 11:55:30] --- Nova execução: 20260623_115530 ---
+[2026-06-23 11:55:30] ⏱ Cronômetro ativo — tempo e ETA após cada configuração
+[2026-06-23 11:55:30] Fase fast: 64 configurações
+[2026-06-23 11:55:30] [fast 1/64] fast_cnn1d_57a2ed33
+[2026-06-23 12:27:59]   → MAE=1.2026 cm | score=1.4343 | ⏱ [fast] 32m 29s | 1/64 | ETA 34h 6m 32s | último 32m 29s | ⏱ [busca total] 32m 29s
+[2026-06-23 12:27:59] [fast 2/64] fast_cnn1d_15791212
+[2026-06-23 12:38:58]   → MAE=1.5216 cm | score=1.8763 | ⏱ [fast] 43m 28s | 2/64 | ETA 22h 27m 21s | último 10m 59s | ⏱ [busca total] 43m 28s
+[2026-06-23 12:38:58] [fast 3/64] fast_cnn1d_d382efae
+[2026-06-23 12:49:26]   → MAE=1.5258 cm | score=1.8780 | ⏱ [fast] 53m 56s | 3/64 | ETA 18h 16m 37s | último 10m 28s | ⏱ [busca total] 53m 56s
+[2026-06-23 12:49:26] [fast 4/64] fast_cnn1d_dcb1db72
+[2026-06-23 12:59:51]   → MAE=1.5954 cm | score=1.9592 | ⏱ [fast] 1h 4m 21s | 4/64 | ETA 16h 5m 15s | último 10m 25s | ⏱ [busca total] 1h 4m 21s
+[2026-06-23 12:59:51] [fast 5/64] fast_cnn1d_946aeba9
+[2026-06-23 13:08:18]   → MAE=1.5729 cm | score=1.9208 | ⏱ [fast] 1h 12m 48s | 5/64 | ETA 14h 19m 6s | último 8m 27s | ⏱ [busca total] 1h 12m 48s
+[2026-06-23 13:08:18] [fast 6/64] fast_cnn1d_7d906aeb
+[2026-06-23 13:16:15]   → MAE=1.6186 cm | score=1.9672 | ⏱ [fast] 1h 20m 45s | 6/64 | ETA 13h 38s | último 7m 57s | ⏱ [busca total] 1h 20m 45s
+[2026-06-23 13:16:15] [fast 7/64] fast_cnn1d_785e7112
+[2026-06-23 13:24:12]   → MAE=1.6878 cm | score=2.0643 | ⏱ [fast] 1h 28m 42s | 7/64 | ETA 12h 2m 15s | último 7m 56s | ⏱ [busca total] 1h 28m 42s
+[2026-06-23 13:24:12] [fast 8/64] fast_cnn1d_442b81e2
+[2026-06-23 13:32:03]   → MAE=1.6977 cm | score=2.0872 | ⏱ [fast] 1h 36m 33s | 8/64 | ETA 11h 15m 54s | último 7m 52s | ⏱ [busca total] 1h 36m 33s
+[2026-06-23 13:32:03] [fast 9/64] fast_cnn1d_5d5f2d39
+[2026-06-23 14:04:41]   → MAE=1.0818 cm | score=1.2998 | ⏱ [fast] 2h 9m 11s | 9/64 | ETA 13h 9m 28s | último 32m 38s | ⏱ [busca total] 2h 9m 11s
+[2026-06-23 14:04:41] [fast 10/64] fast_cnn1d_12dc33b0
+[2026-06-23 14:15:54]   → MAE=1.4305 cm | score=1.7815 | ⏱ [fast] 2h 20m 24s | 10/64 | ETA 12h 38m 11s | último 11m 13s | ⏱ [busca total] 2h 20m 24s
+[2026-06-23 14:15:54] [fast 11/64] fast_cnn1d_adac00a6
+[2026-06-23 14:27:36]   → MAE=1.4048 cm | score=1.7315 | ⏱ [fast] 2h 32m 6s | 11/64 | ETA 12h 12m 53s | último 11m 42s | ⏱ [busca total] 2h 32m 6s
+[2026-06-23 14:27:36] [fast 12/64] fast_cnn1d_0f5e8ddb
+[2026-06-23 14:39:38]   → MAE=1.4686 cm | score=1.8186 | ⏱ [fast] 2h 44m 8s | 12/64 | ETA 11h 51m 17s | último 12m 2s | ⏱ [busca total] 2h 44m 8s
+[2026-06-23 14:39:38] [fast 13/64] fast_cnn1d_2aac0e24
+[2026-06-23 14:48:41]   → MAE=1.3814 cm | score=1.7091 | ⏱ [fast] 2h 53m 11s | 13/64 | ETA 11h 19m 27s | último 9m 3s | ⏱ [busca total] 2h 53m 11s
+[2026-06-23 14:48:41] [fast 14/64] fast_cnn1d_7f7962ad
+[2026-06-23 14:57:10]   → MAE=1.4874 cm | score=1.8268 | ⏱ [fast] 3h 1m 40s | 14/64 | ETA 10h 48m 50s | último 8m 29s | ⏱ [busca total] 3h 1m 40s
+[2026-06-23 14:57:10] [fast 15/64] fast_cnn1d_5e0bfa52
+[2026-06-23 15:05:33]   → MAE=1.4907 cm | score=1.8166 | ⏱ [fast] 3h 10m 3s | 15/64 | ETA 10h 20m 50s | último 8m 23s | ⏱ [busca total] 3h 10m 3s
+[2026-06-23 15:05:33] [fast 16/64] fast_cnn1d_ffb4b141
+[2026-06-23 15:13:47]   → MAE=1.5310 cm | score=1.8880 | ⏱ [fast] 3h 18m 17s | 16/64 | ETA 9h 54m 52s | último 8m 14s | ⏱ [busca total] 3h 18m 17s
+[2026-06-23 15:13:47] [fast 17/64] fast_cnn1d_528bbfd0
+[2026-06-23 15:26:26]   → MAE=1.4553 cm | score=1.7625 | ⏱ [fast] 3h 30m 56s | 17/64 | ETA 9h 43m 10s | último 12m 39s | ⏱ [busca total] 3h 30m 56s
+[2026-06-23 15:26:26] [fast 18/64] fast_cnn1d_246a1f9b
+[2026-06-23 15:37:05]   → MAE=1.4161 cm | score=1.7699 | ⏱ [fast] 3h 41m 35s | 18/64 | ETA 9h 26m 17s | último 10m 39s | ⏱ [busca total] 3h 41m 35s
+[2026-06-23 15:37:05] [fast 19/64] fast_cnn1d_91008411
+[2026-06-23 15:48:31]   → MAE=1.3883 cm | score=1.7241 | ⏱ [fast] 3h 53m 1s | 19/64 | ETA 9h 11m 52s | último 11m 26s | ⏱ [busca total] 3h 53m 1s
+[2026-06-23 15:48:31] [fast 20/64] fast_cnn1d_fd8913e4
+[2026-06-23 15:59:48]   → MAE=1.4762 cm | score=1.8137 | ⏱ [fast] 4h 4m 18s | 20/64 | ETA 8h 57m 29s | último 11m 18s | ⏱ [busca total] 4h 4m 18s
+[2026-06-23 15:59:48] [fast 21/64] fast_cnn1d_564d8f5a
+[2026-06-23 16:08:23]   → MAE=1.4075 cm | score=1.7480 | ⏱ [fast] 4h 12m 53s | 21/64 | ETA 8h 37m 49s | último 8m 35s | ⏱ [busca total] 4h 12m 53s
+[2026-06-23 16:08:23] [fast 22/64] fast_cnn1d_74f31445
+[2026-06-23 16:16:14]   → MAE=1.4438 cm | score=1.7871 | ⏱ [fast] 4h 20m 44s | 22/64 | ETA 8h 17m 46s | último 7m 51s | ⏱ [busca total] 4h 20m 44s
+[2026-06-23 16:16:14] [fast 23/64] fast_cnn1d_46f78d20
+[2026-06-23 16:24:43]   → MAE=1.5473 cm | score=1.8662 | ⏱ [fast] 4h 29m 13s | 23/64 | ETA 7h 59m 55s | último 8m 29s | ⏱ [busca total] 4h 29m 13s
+[2026-06-23 16:24:43] [fast 24/64] fast_cnn1d_1df999b9
+[2026-06-23 16:32:17]   → MAE=1.5847 cm | score=1.9572 | ⏱ [fast] 4h 36m 47s | 24/64 | ETA 7h 41m 19s | último 7m 34s | ⏱ [busca total] 4h 36m 47s
+[2026-06-23 16:32:17] [fast 25/64] fast_cnn1d_c02e25c2
+[2026-06-23 16:44:20]   → MAE=1.4571 cm | score=1.7841 | ⏱ [fast] 4h 48m 50s | 25/64 | ETA 7h 30m 35s | último 12m 3s | ⏱ [busca total] 4h 48m 50s
+[2026-06-23 16:44:20] [fast 26/64] fast_cnn1d_e35abd33
+[2026-06-23 16:55:42]   → MAE=1.3666 cm | score=1.7241 | ⏱ [fast] 5h 12s | 26/64 | ETA 7h 18m 45s | último 11m 22s | ⏱ [busca total] 5h 12s
+[2026-06-23 16:55:42] [fast 27/64] fast_cnn1d_4b27542e
+[2026-06-23 17:08:09]   → MAE=1.3769 cm | score=1.7119 | ⏱ [fast] 5h 12m 39s | 27/64 | ETA 7h 8m 27s | último 12m 27s | ⏱ [busca total] 5h 12m 39s
+[2026-06-23 17:08:09] [fast 28/64] fast_cnn1d_1617a2cf
+[2026-06-23 17:20:18]   → MAE=1.4383 cm | score=1.7786 | ⏱ [fast] 5h 24m 48s | 28/64 | ETA 6h 57m 36s | último 12m 9s | ⏱ [busca total] 5h 24m 48s
+[2026-06-23 17:20:18] [fast 29/64] fast_cnn1d_d5caefbc
+[2026-06-23 17:29:49]   → MAE=1.3618 cm | score=1.6865 | ⏱ [fast] 5h 34m 19s | 29/64 | ETA 6h 43m 30s | último 9m 31s | ⏱ [busca total] 5h 34m 19s
+[2026-06-23 17:29:49] [fast 30/64] fast_cnn1d_dc963dc9
+[2026-06-23 17:38:34]   → MAE=1.3803 cm | score=1.7252 | ⏱ [fast] 5h 43m 4s | 30/64 | ETA 6h 28m 48s | último 8m 44s | ⏱ [busca total] 5h 43m 4s
+[2026-06-23 17:38:34] [fast 31/64] fast_cnn1d_aaa04bce
+[2026-06-23 17:47:45]   → MAE=1.5607 cm | score=1.9012 | ⏱ [fast] 5h 52m 15s | 31/64 | ETA 6h 14m 59s | último 9m 11s | ⏱ [busca total] 5h 52m 15s
+[2026-06-23 17:47:45] [fast 32/64] fast_cnn1d_72293a47
+[2026-06-23 17:56:11]   → MAE=1.5096 cm | score=1.8884 | ⏱ [fast] 6h 41s | 32/64 | ETA 6h 41s | último 8m 26s | ⏱ [busca total] 6h 41s
+[2026-06-23 17:56:11] [fast 33/64] fast_tcn_73d4ee4e
+[2026-06-23 18:12:33]   → MAE=1.4735 cm | score=1.7977 | ⏱ [fast] 6h 17m 4s | 33/64 | ETA 5h 54m 12s | último 16m 22s | ⏱ [busca total] 6h 17m 4s
+[2026-06-23 18:12:33] [fast 34/64] fast_tcn_54e50a2d
+[2026-06-23 18:29:17]   → MAE=1.4958 cm | score=1.8261 | ⏱ [fast] 6h 33m 47s | 34/64 | ETA 5h 47m 28s | último 16m 44s | ⏱ [busca total] 6h 33m 47s
+[2026-06-23 18:29:17] [fast 35/64] fast_tcn_a9f5fd75
+[2026-06-23 23:53:33] --- Retomada de execução ---
+[2026-06-23 23:53:33] ⏱ Cronômetro ativo — tempo e ETA após cada configuração
+[2026-06-23 23:53:33] Fase fast: 64 configurações
+[2026-06-23 23:53:33] [fast 1/64] fast_cnn1d_57a2ed33 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 2/64] fast_cnn1d_15791212 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 3/64] fast_cnn1d_d382efae — já concluído, pulando
+[2026-06-23 23:53:33] [fast 4/64] fast_cnn1d_dcb1db72 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 5/64] fast_cnn1d_946aeba9 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 6/64] fast_cnn1d_7d906aeb — já concluído, pulando
+[2026-06-23 23:53:33] [fast 7/64] fast_cnn1d_785e7112 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 8/64] fast_cnn1d_442b81e2 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 9/64] fast_cnn1d_5d5f2d39 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 10/64] fast_cnn1d_12dc33b0 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 11/64] fast_cnn1d_adac00a6 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 12/64] fast_cnn1d_0f5e8ddb — já concluído, pulando
+[2026-06-23 23:53:33] [fast 13/64] fast_cnn1d_2aac0e24 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 14/64] fast_cnn1d_7f7962ad — já concluído, pulando
+[2026-06-23 23:53:33] [fast 15/64] fast_cnn1d_5e0bfa52 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 16/64] fast_cnn1d_ffb4b141 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 17/64] fast_cnn1d_528bbfd0 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 18/64] fast_cnn1d_246a1f9b — já concluído, pulando
+[2026-06-23 23:53:33] [fast 19/64] fast_cnn1d_91008411 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 20/64] fast_cnn1d_fd8913e4 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 21/64] fast_cnn1d_564d8f5a — já concluído, pulando
+[2026-06-23 23:53:33] [fast 22/64] fast_cnn1d_74f31445 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 23/64] fast_cnn1d_46f78d20 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 24/64] fast_cnn1d_1df999b9 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 25/64] fast_cnn1d_c02e25c2 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 26/64] fast_cnn1d_e35abd33 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 27/64] fast_cnn1d_4b27542e — já concluído, pulando
+[2026-06-23 23:53:33] [fast 28/64] fast_cnn1d_1617a2cf — já concluído, pulando
+[2026-06-23 23:53:33] [fast 29/64] fast_cnn1d_d5caefbc — já concluído, pulando
+[2026-06-23 23:53:33] [fast 30/64] fast_cnn1d_dc963dc9 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 31/64] fast_cnn1d_aaa04bce — já concluído, pulando
+[2026-06-23 23:53:33] [fast 32/64] fast_cnn1d_72293a47 — já concluído, pulando
+[2026-06-23 23:53:33] [fast 33/64] fast_tcn_73d4ee4e — já concluído, pulando
+[2026-06-23 23:53:33] [fast 34/64] fast_tcn_54e50a2d — já concluído, pulando
+[2026-06-23 23:53:33] [fast 35/64] fast_tcn_a9f5fd75
+[2026-06-24 00:20:21]   → MAE=1.3212 cm | score=1.5576 | ⏱ [fast] 26m 48s | 1/30 | ETA 12h 57m 21s | último 26m 48s | ⏱ [busca total] 26m 48s
+[2026-06-24 00:20:21] [fast 36/64] fast_tcn_b4d85add
+[2026-06-24 00:35:58]   → MAE=1.6654 cm | score=1.9916 | ⏱ [fast] 42m 25s | 2/30 | ETA 9h 53m 51s | último 15m 37s | ⏱ [busca total] 42m 25s
+[2026-06-24 00:35:58] [fast 37/64] fast_tcn_17cf2f97
+[2026-06-24 01:04:50]   → MAE=1.3269 cm | score=1.5703 | ⏱ [fast] 1h 11m 17s | 3/30 | ETA 10h 41m 32s | último 28m 52s | ⏱ [busca total] 1h 11m 17s
+[2026-06-24 01:04:50] [fast 38/64] fast_tcn_c6b5f11b
+[2026-06-24 01:34:07]   → MAE=1.3221 cm | score=1.5670 | ⏱ [fast] 1h 40m 34s | 4/30 | ETA 10h 53m 40s | último 29m 17s | ⏱ [busca total] 1h 40m 34s
+[2026-06-24 01:34:07] [fast 39/64] fast_tcn_e26fbba2
+[2026-06-24 01:45:43]   → MAE=1.6137 cm | score=1.9401 | ⏱ [fast] 1h 52m 10s | 5/30 | ETA 9h 20m 48s | último 11m 36s | ⏱ [busca total] 1h 52m 10s
+[2026-06-24 01:45:43] [fast 40/64] fast_tcn_54e33498
+[2026-06-24 01:57:05]   → MAE=1.6517 cm | score=1.9854 | ⏱ [fast] 2h 3m 32s | 6/30 | ETA 8h 14m 6s | último 11m 22s | ⏱ [busca total] 2h 3m 32s
+[2026-06-24 01:57:05] [fast 41/64] fast_tcn_f6aca7a7
+[2026-06-24 02:12:04]   → MAE=1.6425 cm | score=1.9665 | ⏱ [fast] 2h 18m 29s | 7/30 | ETA 7h 35m 2s | último 14m 58s | ⏱ [busca total] 2h 18m 29s
+[2026-06-24 02:12:04] [fast 42/64] fast_tcn_b649a12d
+[2026-06-24 02:27:22]   → MAE=1.6523 cm | score=1.9583 | ⏱ [fast] 2h 33m 47s | 8/30 | ETA 7h 2m 55s | último 15m 18s | ⏱ [busca total] 2h 33m 47s
+[2026-06-24 02:27:22] [fast 43/64] fast_tcn_9219c7a9
+[2026-06-24 02:43:20]   → MAE=1.6477 cm | score=1.9542 | ⏱ [fast] 2h 49m 45s | 9/30 | ETA 6h 36m 6s | último 15m 58s | ⏱ [busca total] 2h 49m 45s
+[2026-06-24 02:43:20] [fast 44/64] fast_tcn_d9bea4e9
+[2026-06-24 02:57:41]   → MAE=1.6599 cm | score=1.9820 | ⏱ [fast] 3h 4m 6s | 10/30 | ETA 6h 8m 13s | último 14m 21s | ⏱ [busca total] 3h 4m 6s
+[2026-06-24 02:57:41] [fast 45/64] fast_tcn_f28d6771
+[2026-06-24 03:08:13]   → MAE=1.6732 cm | score=1.9898 | ⏱ [fast] 3h 14m 38s | 11/30 | ETA 5h 36m 11s | último 10m 31s | ⏱ [busca total] 3h 14m 38s
+[2026-06-24 03:08:13] [fast 46/64] fast_tcn_ca3e6574
+[2026-06-24 03:18:41]   → MAE=1.6517 cm | score=1.9631 | ⏱ [fast] 3h 25m 6s | 12/30 | ETA 5h 7m 39s | último 10m 28s | ⏱ [busca total] 3h 25m 6s
+[2026-06-24 03:18:41] [fast 47/64] fast_tcn_13d0b54c
+[2026-06-24 03:29:20]   → MAE=1.6775 cm | score=2.0192 | ⏱ [fast] 3h 35m 45s | 13/30 | ETA 4h 42m 8s | último 10m 39s | ⏱ [busca total] 3h 35m 45s
+[2026-06-24 03:29:20] [fast 48/64] fast_tcn_3f3a3b79
+[2026-06-24 03:40:05]   → MAE=1.6668 cm | score=2.0099 | ⏱ [fast] 3h 46m 31s | 14/30 | ETA 4h 18m 52s | último 10m 46s | ⏱ [busca total] 3h 46m 31s
+[2026-06-24 03:40:05] [fast 49/64] fast_tcn_7a4c3879
+[2026-06-24 03:56:03]   → MAE=1.6060 cm | score=1.9153 | ⏱ [fast] 4h 2m 28s | 15/30 | ETA 4h 2m 28s | último 15m 57s | ⏱ [busca total] 4h 2m 28s
+[2026-06-24 03:56:03] [fast 50/64] fast_tcn_6b3b0ba7
+[2026-06-24 04:11:01]   → MAE=1.6120 cm | score=1.9256 | ⏱ [fast] 4h 17m 26s | 16/30 | ETA 3h 45m 15s | último 14m 58s | ⏱ [busca total] 4h 17m 26s
+[2026-06-24 04:11:01] [fast 51/64] fast_tcn_80d051a8
+[2026-06-24 04:26:41]   → MAE=1.6242 cm | score=1.9308 | ⏱ [fast] 4h 33m 6s | 17/30 | ETA 3h 28m 50s | último 15m 40s | ⏱ [busca total] 4h 33m 6s
+[2026-06-24 04:26:41] [fast 52/64] fast_tcn_fc8ad8c3
+[2026-06-24 04:42:11]   → MAE=1.6660 cm | score=1.9709 | ⏱ [fast] 4h 48m 36s | 18/30 | ETA 3h 12m 24s | último 15m 30s | ⏱ [busca total] 4h 48m 36s
+[2026-06-24 04:42:11] [fast 53/64] fast_tcn_c27da38e
+[2026-06-24 04:53:39]   → MAE=1.6140 cm | score=1.9368 | ⏱ [fast] 5h 4s | 19/30 | ETA 2h 53m 43s | último 11m 28s | ⏱ [busca total] 5h 4s
+[2026-06-24 04:53:39] [fast 54/64] fast_tcn_1b8486df
+[2026-06-24 05:22:35]   → MAE=1.2418 cm | score=1.4714 | ⏱ [fast] 5h 29m | 20/30 | ETA 2h 44m 30s | último 28m 56s | ⏱ [busca total] 5h 29m
+[2026-06-24 05:22:35] [fast 55/64] fast_tcn_3a48dfea
+[2026-06-24 05:33:36]   → MAE=1.6200 cm | score=1.9456 | ⏱ [fast] 5h 40m 1s | 21/30 | ETA 2h 25m 43s | último 11m 1s | ⏱ [busca total] 5h 40m 1s
+[2026-06-24 05:33:36] [fast 56/64] fast_tcn_fd93698e
+[2026-06-24 05:44:29]   → MAE=1.6292 cm | score=1.9476 | ⏱ [fast] 5h 50m 54s | 22/30 | ETA 2h 7m 36s | último 10m 54s | ⏱ [busca total] 5h 50m 54s
+[2026-06-24 05:44:29] [fast 57/64] fast_tcn_0656d604
+[2026-06-24 05:59:35]   → MAE=1.6019 cm | score=1.8972 | ⏱ [fast] 6h 6m | 23/30 | ETA 1h 51m 24s | último 15m 6s | ⏱ [busca total] 6h 6m
+[2026-06-24 05:59:35] [fast 58/64] fast_tcn_16cc42ec
+[2026-06-24 06:16:55]   → MAE=1.5857 cm | score=1.8800 | ⏱ [fast] 6h 23m 20s | 24/30 | ETA 1h 35m 50s | último 17m 20s | ⏱ [busca total] 6h 23m 20s
+[2026-06-24 06:16:55] [fast 59/64] fast_tcn_a8211550
+[2026-06-24 06:35:03]   → MAE=1.6355 cm | score=1.9400 | ⏱ [fast] 6h 41m 28s | 25/30 | ETA 1h 20m 18s | último 18m 8s | ⏱ [busca total] 6h 41m 28s
+[2026-06-24 06:35:03] [fast 60/64] fast_tcn_048b6df4
+[2026-06-24 06:50:48]   → MAE=1.6279 cm | score=1.9352 | ⏱ [fast] 6h 57m 14s | 26/30 | ETA 1h 4m 11s | último 15m 46s | ⏱ [busca total] 6h 57m 14s
+[2026-06-24 06:50:48] [fast 61/64] fast_tcn_1c8eeae5
+[2026-06-24 07:02:22]   → MAE=1.6520 cm | score=1.9643 | ⏱ [fast] 7h 8m 47s | 27/30 | ETA 47m 39s | último 11m 34s | ⏱ [busca total] 7h 8m 47s
+[2026-06-24 07:02:22] [fast 62/64] fast_tcn_f4ebd3e2
+[2026-06-24 07:13:39]   → MAE=1.6455 cm | score=1.9574 | ⏱ [fast] 7h 20m 4s | 28/30 | ETA 31m 26s | último 11m 17s | ⏱ [busca total] 7h 20m 4s
+[2026-06-24 07:13:39] [fast 63/64] fast_tcn_6ead7e44
+[2026-06-24 07:25:30]   → MAE=1.6190 cm | score=1.9444 | ⏱ [fast] 7h 31m 55s | 29/30 | ETA 15m 35s | último 11m 51s | ⏱ [busca total] 7h 31m 55s
+[2026-06-24 07:25:30] [fast 64/64] fast_tcn_711acf91
+[2026-06-24 07:37:12]   → MAE=1.6496 cm | score=1.9659 | ⏱ [fast] 7h 43m 37s | 30/30 | ETA 0s | último 11m 42s | ⏱ [busca total] 7h 43m 37s
+[2026-06-24 07:37:12] Fase refine: 1274 configurações (top-5)
+[2026-06-24 07:37:12] [refine 1/1274] ref_tcn_2e1e1355
+[2026-06-24 08:13:06]   → MAE=1.6145 cm | score=1.9366 | ⏱ [refine] 35m 54s | 1/1274 | ETA 761h 50m 14s | último 35m 54s | ⏱ [busca total] 8h 19m 31s
+[2026-06-24 08:13:06] [refine 2/1274] ref_tcn_5073d072
+[2026-06-24 08:35:36]   → MAE=1.6317 cm | score=1.9394 | ⏱ [refine] 58m 25s | 2/1274 | ETA 619h 8m 40s | último 22m 30s | ⏱ [busca total] 8h 42m 1s
+[2026-06-24 08:35:36] [refine 3/1274] ref_tcn_08f39134
+[2026-06-24 08:49:26]   → MAE=1.5225 cm | score=1.8408 | ⏱ [refine] 1h 12m 14s | 3/1274 | ETA 510h 4m 6s | último 13m 50s | ⏱ [busca total] 8h 55m 51s
+[2026-06-24 08:49:26] [refine 4/1274] ref_tcn_2dbef567
+[2026-06-24 09:23:58]   → MAE=1.5850 cm | score=1.9016 | ⏱ [refine] 1h 46m 46s | 4/1274 | ETA 564h 59m 27s | último 34m 32s | ⏱ [busca total] 9h 30m 23s
+[2026-06-24 09:23:58] [refine 5/1274] ref_tcn_e3a182eb
+[2026-06-24 09:41:21]   → MAE=1.5160 cm | score=1.8407 | ⏱ [refine] 2h 4m 9s | 5/1274 | ETA 525h 11m 4s | último 17m 23s | ⏱ [busca total] 9h 47m 46s
+[2026-06-24 09:41:21] [refine 6/1274] ref_tcn_fe75ee1d
+[2026-06-24 09:58:39]   → MAE=1.6308 cm | score=1.9314 | ⏱ [refine] 2h 21m 27s | 6/1274 | ETA 498h 12m 47s | último 17m 17s | ⏱ [busca total] 10h 5m 4s
+[2026-06-24 09:58:39] [refine 7/1274] ref_tcn_53d1588b
+[2026-06-24 10:17:32] --- Retomada de execução ---
+[2026-06-24 10:17:32] ⏱ Cronômetro ativo — tempo e ETA após cada configuração
+[2026-06-24 10:17:32] Fase fast: 64 configurações
+[2026-06-24 10:17:32] [fast 1/64] fast_cnn1d_57a2ed33 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 2/64] fast_cnn1d_15791212 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 3/64] fast_cnn1d_d382efae — já concluído, pulando
+[2026-06-24 10:17:32] [fast 4/64] fast_cnn1d_dcb1db72 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 5/64] fast_cnn1d_946aeba9 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 6/64] fast_cnn1d_7d906aeb — já concluído, pulando
+[2026-06-24 10:17:32] [fast 7/64] fast_cnn1d_785e7112 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 8/64] fast_cnn1d_442b81e2 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 9/64] fast_cnn1d_5d5f2d39 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 10/64] fast_cnn1d_12dc33b0 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 11/64] fast_cnn1d_adac00a6 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 12/64] fast_cnn1d_0f5e8ddb — já concluído, pulando
+[2026-06-24 10:17:32] [fast 13/64] fast_cnn1d_2aac0e24 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 14/64] fast_cnn1d_7f7962ad — já concluído, pulando
+[2026-06-24 10:17:32] [fast 15/64] fast_cnn1d_5e0bfa52 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 16/64] fast_cnn1d_ffb4b141 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 17/64] fast_cnn1d_528bbfd0 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 18/64] fast_cnn1d_246a1f9b — já concluído, pulando
+[2026-06-24 10:17:32] [fast 19/64] fast_cnn1d_91008411 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 20/64] fast_cnn1d_fd8913e4 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 21/64] fast_cnn1d_564d8f5a — já concluído, pulando
+[2026-06-24 10:17:32] [fast 22/64] fast_cnn1d_74f31445 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 23/64] fast_cnn1d_46f78d20 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 24/64] fast_cnn1d_1df999b9 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 25/64] fast_cnn1d_c02e25c2 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 26/64] fast_cnn1d_e35abd33 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 27/64] fast_cnn1d_4b27542e — já concluído, pulando
+[2026-06-24 10:17:32] [fast 28/64] fast_cnn1d_1617a2cf — já concluído, pulando
+[2026-06-24 10:17:32] [fast 29/64] fast_cnn1d_d5caefbc — já concluído, pulando
+[2026-06-24 10:17:32] [fast 30/64] fast_cnn1d_dc963dc9 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 31/64] fast_cnn1d_aaa04bce — já concluído, pulando
+[2026-06-24 10:17:32] [fast 32/64] fast_cnn1d_72293a47 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 33/64] fast_tcn_73d4ee4e — já concluído, pulando
+[2026-06-24 10:17:32] [fast 34/64] fast_tcn_54e50a2d — já concluído, pulando
+[2026-06-24 10:17:32] [fast 35/64] fast_tcn_a9f5fd75 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 36/64] fast_tcn_b4d85add — já concluído, pulando
+[2026-06-24 10:17:32] [fast 37/64] fast_tcn_17cf2f97 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 38/64] fast_tcn_c6b5f11b — já concluído, pulando
+[2026-06-24 10:17:32] [fast 39/64] fast_tcn_e26fbba2 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 40/64] fast_tcn_54e33498 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 41/64] fast_tcn_f6aca7a7 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 42/64] fast_tcn_b649a12d — já concluído, pulando
+[2026-06-24 10:17:32] [fast 43/64] fast_tcn_9219c7a9 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 44/64] fast_tcn_d9bea4e9 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 45/64] fast_tcn_f28d6771 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 46/64] fast_tcn_ca3e6574 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 47/64] fast_tcn_13d0b54c — já concluído, pulando
+[2026-06-24 10:17:32] [fast 48/64] fast_tcn_3f3a3b79 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 49/64] fast_tcn_7a4c3879 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 50/64] fast_tcn_6b3b0ba7 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 51/64] fast_tcn_80d051a8 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 52/64] fast_tcn_fc8ad8c3 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 53/64] fast_tcn_c27da38e — já concluído, pulando
+[2026-06-24 10:17:32] [fast 54/64] fast_tcn_1b8486df — já concluído, pulando
+[2026-06-24 10:17:32] [fast 55/64] fast_tcn_3a48dfea — já concluído, pulando
+[2026-06-24 10:17:32] [fast 56/64] fast_tcn_fd93698e — já concluído, pulando
+[2026-06-24 10:17:32] [fast 57/64] fast_tcn_0656d604 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 58/64] fast_tcn_16cc42ec — já concluído, pulando
+[2026-06-24 10:17:32] [fast 59/64] fast_tcn_a8211550 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 60/64] fast_tcn_048b6df4 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 61/64] fast_tcn_1c8eeae5 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 62/64] fast_tcn_f4ebd3e2 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 63/64] fast_tcn_6ead7e44 — já concluído, pulando
+[2026-06-24 10:17:32] [fast 64/64] fast_tcn_711acf91 — já concluído, pulando
+[2026-06-24 10:17:32] Fase refine: pulada (--skip-refine). 6 resultado(s) parcial(is) mantidos no ranking.
+[2026-06-24 10:17:32] Fase stability: 25 sementes
+[2026-06-24 10:17:32] [stability 1/25] seed=7 stab_tcn_dd16fd13
+[2026-06-24 11:21:29]   → MAE=1.1732 cm | ⏱ [stability] 1h 3m 57s | 1/25 | ETA 25h 34m 39s | último 1h 3m 57s | ⏱ [busca total] 1h 3m 57s
+[2026-06-24 11:21:29] [stability 2/25] seed=42 stab_tcn_e3a182eb
+[2026-06-24 12:20:32]   → MAE=1.2327 cm | ⏱ [stability] 2h 3m | 2/25 | ETA 23h 34m 29s | último 59m 3s | ⏱ [busca total] 2h 3m
+[2026-06-24 12:20:32] [stability 3/25] seed=123 stab_tcn_b79924b3
+[2026-06-24 13:23:02]   → MAE=1.1912 cm | ⏱ [stability] 3h 5m 30s | 3/25 | ETA 22h 40m 21s | último 1h 2m 30s | ⏱ [busca total] 3h 5m 30s
+[2026-06-24 13:23:02] [stability 4/25] seed=2026 stab_tcn_cdc6fbc6
+[2026-06-24 14:18:51]   → MAE=1.1836 cm | ⏱ [stability] 4h 1m 18s | 4/25 | ETA 21h 6m 51s | último 55m 48s | ⏱ [busca total] 4h 1m 18s
+[2026-06-24 14:18:51] [stability 5/25] seed=3407 stab_tcn_8155e819
+[2026-06-24 15:20:03]   → MAE=1.1747 cm | ⏱ [stability] 5h 2m 30s | 5/25 | ETA 20h 10m 1s | último 1h 1m 12s | ⏱ [busca total] 5h 2m 30s
+[2026-06-24 15:20:03] [stability 6/25] seed=7 stab_tcn_a425fcea
+[2026-06-24 16:00:05]   → MAE=1.2248 cm | ⏱ [stability] 5h 42m 33s | 6/25 | ETA 18h 4m 43s | último 40m 2s | ⏱ [busca total] 5h 42m 33s
+[2026-06-24 16:00:05] [stability 7/25] seed=42 stab_tcn_08f39134
+[2026-06-24 16:39:29]   → MAE=1.2656 cm | ⏱ [stability] 6h 21m 57s | 7/25 | ETA 16h 22m 9s | último 39m 24s | ⏱ [busca total] 6h 21m 57s
+[2026-06-24 16:39:29] [stability 8/25] seed=123 stab_tcn_67b29062
+[2026-06-24 17:18:17]   → MAE=1.2443 cm | ⏱ [stability] 7h 45s | 8/25 | ETA 14h 54m 5s | último 38m 48s | ⏱ [busca total] 7h 45s
+[2026-06-24 17:18:17] [stability 9/25] seed=2026 stab_tcn_f65fd2f8
+[2026-06-24 17:57:37]   → MAE=1.2505 cm | ⏱ [stability] 7h 40m 4s | 9/25 | ETA 13h 37m 55s | último 39m 20s | ⏱ [busca total] 7h 40m 4s
+[2026-06-24 17:57:37] [stability 10/25] seed=3407 stab_tcn_709c0124
+[2026-06-24 18:37:40]   → MAE=1.2261 cm | ⏱ [stability] 8h 20m 8s | 10/25 | ETA 12h 30m 12s | último 40m 3s | ⏱ [busca total] 8h 20m 8s
+[2026-06-24 18:37:40] [stability 11/25] seed=7 stab_tcn_c94f567b
+[2026-06-24 20:08:45]   → MAE=1.1716 cm | ⏱ [stability] 9h 51m 12s | 11/25 | ETA 12h 32m 27s | último 1h 31m 4s | ⏱ [busca total] 9h 51m 12s
+[2026-06-24 20:08:45] [stability 12/25] seed=42 stab_tcn_2dbef567
+[2026-06-24 21:35:12]   → MAE=1.2007 cm | ⏱ [stability] 11h 17m 40s | 12/25 | ETA 12h 14m 8s | último 1h 26m 28s | ⏱ [busca total] 11h 17m 40s
+[2026-06-24 21:35:12] [stability 13/25] seed=123 stab_tcn_35165422
+[2026-06-24 23:10:58]   → MAE=1.2000 cm | ⏱ [stability] 12h 53m 25s | 13/25 | ETA 11h 53m 55s | último 1h 35m 45s | ⏱ [busca total] 12h 53m 25s
+[2026-06-24 23:10:58] [stability 14/25] seed=2026 stab_tcn_a2756ebf
+[2026-06-25 00:45:52]   → MAE=1.2025 cm | ⏱ [stability] 14h 28m 18s | 14/25 | ETA 11h 22m 14s | último 1h 34m 53s | ⏱ [busca total] 14h 28m 18s
+[2026-06-25 00:45:52] [stability 15/25] seed=3407 stab_tcn_52df49df
+[2026-06-25 02:12:10]   → MAE=1.1861 cm | ⏱ [stability] 15h 54m 37s | 15/25 | ETA 10h 36m 25s | último 1h 26m 19s | ⏱ [busca total] 15h 54m 37s
+[2026-06-25 02:12:10] [stability 16/25] seed=7 stab_tcn_fc947168
+[2026-06-25 02:52:52]   → MAE=1.2110 cm | ⏱ [stability] 16h 35m 18s | 16/25 | ETA 9h 19m 52s | último 40m 41s | ⏱ [busca total] 16h 35m 18s
+[2026-06-25 02:52:52] [stability 17/25] seed=42 stab_tcn_fe75ee1d
+[2026-06-25 03:33:48]   → MAE=1.2306 cm | ⏱ [stability] 17h 16m 15s | 17/25 | ETA 8h 7m 39s | último 40m 56s | ⏱ [busca total] 17h 16m 15s
+[2026-06-25 03:33:48] [stability 18/25] seed=123 stab_tcn_40e73ecf
+[2026-06-25 04:10:02]   → MAE=1.2428 cm | ⏱ [stability] 17h 52m 29s | 18/25 | ETA 6h 57m 4s | último 36m 14s | ⏱ [busca total] 17h 52m 29s
+[2026-06-25 04:10:02] [stability 19/25] seed=2026 stab_tcn_1c7564be
+[2026-06-25 04:49:06]   → MAE=1.2048 cm | ⏱ [stability] 18h 31m 32s | 19/25 | ETA 5h 51m 1s | último 39m 4s | ⏱ [busca total] 18h 31m 32s
+[2026-06-25 04:49:06] [stability 20/25] seed=3407 stab_tcn_3a58588a
+[2026-06-25 05:28:36]   → MAE=1.2499 cm | ⏱ [stability] 19h 11m 2s | 20/25 | ETA 4h 47m 46s | último 39m 30s | ⏱ [busca total] 19h 11m 2s
+[2026-06-25 05:28:36] [stability 21/25] seed=7 stab_tcn_9d3ea2d0
+[2026-06-25 06:58:53]   → MAE=1.1428 cm | ⏱ [stability] 20h 41m 19s | 21/25 | ETA 3h 56m 27s | último 1h 30m 17s | ⏱ [busca total] 20h 41m 19s
+[2026-06-25 06:58:53] [stability 22/25] seed=42 stab_tcn_2e1e1355
+[2026-06-25 08:44:03]   → MAE=1.2198 cm | ⏱ [stability] 22h 26m 29s | 22/25 | ETA 3h 3m 37s | último 1h 45m 10s | ⏱ [busca total] 22h 26m 29s
+[2026-06-25 08:44:03] [stability 23/25] seed=123 stab_tcn_003ef9d5
+[2026-06-25 11:03:08]   → MAE=1.2049 cm | ⏱ [stability] 24h 45m 34s | 23/25 | ETA 2h 9m 11s | último 2h 19m 5s | ⏱ [busca total] 24h 45m 34s
+[2026-06-25 11:03:08] [stability 24/25] seed=2026 stab_tcn_cb2da2e7
+[2026-06-25 13:33:34]   → MAE=1.1841 cm | ⏱ [stability] 27h 16m | 24/25 | ETA 1h 8m 10s | último 2h 30m 26s | ⏱ [busca total] 27h 16m
+[2026-06-25 13:33:34] [stability 25/25] seed=3407 stab_tcn_c420a354
+[2026-06-25 16:03:36]   → MAE=1.1858 cm | ⏱ [stability] 29h 46m 2s | 25/25 | ETA 0s | último 2h 30m 2s | ⏱ [busca total] 29h 46m 2s
+[2026-06-25 16:03:36] Melhor config: stab_tcn_9d3ea2d0 | MAE=1.1428 cm | score=1.3573
+[2026-06-25 16:03:36] ⏱ Busca concluída em 29h 46m 2s

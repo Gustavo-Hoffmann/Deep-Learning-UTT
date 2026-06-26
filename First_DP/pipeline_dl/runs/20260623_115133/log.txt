@@ -1,0 +1,4 @@
+[2026-06-23 11:51:33] --- Nova execução: 20260623_115133 ---
+[2026-06-23 11:51:34] ⏱ Cronômetro ativo — tempo e ETA após cada configuração
+[2026-06-23 11:51:34] Fase fast: 64 configurações
+[2026-06-23 11:51:34] [fast 1/64] fast_cnn1d_57a2ed33

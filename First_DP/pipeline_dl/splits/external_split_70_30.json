@@ -1,0 +1,42 @@
+{
+  "created_at": "2026-06-24T10:17:32",
+  "description": "Split externo 70/30 por sujeito. Teste final intocado até Etapa 15.",
+  "seed": 42,
+  "dev_ratio_target": 0.7,
+  "n_subjects_total": 27,
+  "n_dev": 19,
+  "n_test": 8,
+  "dev_fraction_actual": 0.7037,
+  "test_fraction_actual": 0.2963,
+  "dev_subject_ids": [
+    "02",
+    "03",
+    "08",
+    "09",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "25",
+    "27",
+    "28",
+    "29"
+  ],
+  "test_subject_ids": [
+    "01",
+    "04",
+    "06",
+    "10",
+    "11",
+    "23",
+    "24",
+    "26"
+  ]
+}

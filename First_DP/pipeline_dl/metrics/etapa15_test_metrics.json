@@ -1,0 +1,85 @@
+{
+  "evaluated_at": "2026-06-25T17:30:36",
+  "note": "Avaliação única no teste final. Não reajustar hiperparâmetros após isto.",
+  "n_epochs": 27,
+  "epochs_origin": "best_config_p75",
+  "dev_subject_ids": [
+    "02",
+    "03",
+    "08",
+    "09",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "25",
+    "27",
+    "28",
+    "29"
+  ],
+  "test_subject_ids": [
+    "01",
+    "04",
+    "06",
+    "10",
+    "11",
+    "23",
+    "24",
+    "26"
+  ],
+  "test_loss": 0.2931735272503505,
+  "metrics_scaled": {
+    "mae": 0.3913182594145424,
+    "rmse": 0.4933825973120553,
+    "rms": 0.4933825973120553,
+    "r2": 0.6588055048251253,
+    "bias": -0.11534104576495212,
+    "mape_pct": 199.0000374644457,
+    "n_samples": 141150
+  },
+  "metrics_cm": {
+    "mae": 1.1716235766664094,
+    "rmse": 1.4772085621370084,
+    "rms": 1.4772085621370084,
+    "r2": 0.6588055048251252,
+    "bias": -0.34533601569667827,
+    "mape_pct": 75336.63476832156,
+    "n_samples": 141150
+  },
+  "experiment": {
+    "model_type": "tcn",
+    "window_seconds": 2.5,
+    "stride_seconds": 0.25,
+    "window_samples": 150,
+    "stride_samples": 15
+  },
+  "training": {
+    "loss": "mse",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "huber_delta": 1.0,
+    "batch_size": 16,
+    "max_epochs": 300,
+    "patience": 30,
+    "min_delta": 0.0001,
+    "dropout": 0.1,
+    "num_workers": 6,
+    "pin_memory": false,
+    "use_amp": false
+  },
+  "used_best_hyperparameters": true,
+  "best_trial_id": "stab_tcn_9d3ea2d0",
+  "calibration": null,
+  "evaluation_files": {
+    "window": "C:\\Users\\Hoffmann\\Desktop\\Deep-Learning-UTT\\outputs\\pipeline_dl\\metrics\\etapa15_test_window_level_metrics.csv",
+    "subject_mean": "C:\\Users\\Hoffmann\\Desktop\\Deep-Learning-UTT\\outputs\\pipeline_dl\\metrics\\subject_level_mean_metrics.csv",
+    "subject_median": "C:\\Users\\Hoffmann\\Desktop\\Deep-Learning-UTT\\outputs\\pipeline_dl\\metrics\\subject_level_median_metrics.csv"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "fold_name": "loso_val_08",
+  "val_subject_id": "08",
+  "train_subject_ids": [
+    "02",
+    "03",
+    "09",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "25",
+    "27",
+    "28",
+    "29"
+  ],
+  "best_epoch": 17,
+  "best_val_loss": 0.06287188176065683,
+  "best_val_metrics": {
+    "mae": 0.28562105569716534,
+    "rmse": 0.3518480315821328,
+    "rms": 0.3518480315821328,
+    "r2": 0.8580784156651584,
+    "bias": -0.16574003773102583,
+    "mape_pct": 114.9166558702624,
+    "n_samples": 18150
+  },
+  "n_epochs_ran": 47,
+  "stop_reason": "early_stopping",
+  "model_type": "tcn",
+  "loss": "huber",
+  "learning_rate": 0.001,
+  "dropout": 0.1
+}

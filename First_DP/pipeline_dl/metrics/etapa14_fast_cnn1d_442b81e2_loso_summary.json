@@ -1,0 +1,141 @@
+{
+  "description": "LOSO completo nos sujeitos de desenvolvimento (70%). Teste final intocado.",
+  "artifact_prefix": "etapa14_fast_cnn1d_442b81e2",
+  "model_type": "cnn1d",
+  "n_folds": 7,
+  "dev_subject_ids": [
+    "02",
+    "03",
+    "08",
+    "09",
+    "12",
+    "13",
+    "14"
+  ],
+  "aggregate": {
+    "mae_mean": 0.5646254345541476,
+    "mae_std": 0.31460780069399,
+    "rmse_mean": 0.6780269337695686,
+    "rmse_std": 0.3555025281367481,
+    "r2_mean": 0.40390928239044627,
+    "r2_std": 0.5470418172017324,
+    "bias_mean": 0.14815767975980815,
+    "bias_std": 0.4700287375066082
+  },
+  "per_subject": [
+    {
+      "val_subject_id": "02",
+      "n_train_windows": 591,
+      "n_val_windows": 33,
+      "best_epoch": 59,
+      "best_val_loss": 0.0929520484060049,
+      "mae": 0.39493056290481365,
+      "rmse": 0.46863686790341935,
+      "rms": 0.46863686790341935,
+      "r2": 0.6238079240430552,
+      "bias": 0.3479230830790134,
+      "mape_pct": 214.3600482109255
+    },
+    {
+      "val_subject_id": "03",
+      "n_train_windows": 591,
+      "n_val_windows": 33,
+      "best_epoch": 15,
+      "best_val_loss": 0.11085301265120506,
+      "mae": 0.409866585807388,
+      "rmse": 0.506127986666458,
+      "rms": 0.506127986666458,
+      "r2": 0.7903381743071687,
+      "bias": 0.01040990995895823,
+      "mape_pct": 105.58271187946919
+    },
+    {
+      "val_subject_id": "08",
+      "n_train_windows": 592,
+      "n_val_windows": 32,
+      "best_epoch": 56,
+      "best_val_loss": 0.10708480328321457,
+      "mae": 0.3699367172897231,
+      "rmse": 0.4564535853363842,
+      "rms": 0.4564535853363842,
+      "r2": 0.7639602000962766,
+      "bias": -0.1453633500893678,
+      "mape_pct": 110.12138234834794
+    },
+    {
+      "val_subject_id": "09",
+      "n_train_windows": 591,
+      "n_val_windows": 33,
+      "best_epoch": 1,
+      "best_val_loss": 0.11872359365224838,
+      "mae": 0.40846478965355676,
+      "rmse": 0.49871952353216675,
+      "rms": 0.49871952353216675,
+      "r2": 0.6305907626065446,
+      "bias": 0.08704531836903165,
+      "mape_pct": 147.91737349273924
+    },
+    {
+      "val_subject_id": "12",
+      "n_train_windows": 592,
+      "n_val_windows": 32,
+      "best_epoch": 13,
+      "best_val_loss": 0.1546604484319687,
+      "mae": 0.4451876048717016,
+      "rmse": 0.5404873794834282,
+      "rms": 0.5404873794834282,
+      "r2": 0.30014679555957435,
+      "bias": -0.19920287270256268,
+      "mape_pct": 408.30026482504627
+    },
+    {
+      "val_subject_id": "13",
+      "n_train_windows": 591,
+      "n_val_windows": 33,
+      "best_epoch": 6,
+      "best_val_loss": 0.3297380357980728,
+      "mae": 0.6892689565333627,
+      "rmse": 0.853449539662385,
+      "rms": 0.853449539662385,
+      "r2": 0.49674527577376215,
+      "bias": -0.1842911016256572,
+      "mape_pct": 425.2432002074474
+    },
+    {
+      "val_subject_id": "14",
+      "n_train_windows": 588,
+      "n_val_windows": 36,
+      "best_epoch": 2,
+      "best_val_loss": 0.9215226471424103,
+      "mae": 1.234722824818487,
+      "rmse": 1.4223136538027383,
+      "rms": 1.4223136538027383,
+      "r2": -0.7782241556532576,
+      "bias": 1.1205827713292416,
+      "mape_pct": 185.31543577238793
+    }
+  ],
+  "training_config": {
+    "loss": "huber",
+    "learning_rate": 0.0005,
+    "weight_decay": 0.0001,
+    "huber_delta": 1.0,
+    "batch_size": 32,
+    "max_epochs": 300,
+    "patience": 30,
+    "min_delta": 0.0001,
+    "dropout": 0.2,
+    "num_workers": 6,
+    "pin_memory": false,
+    "use_amp": false
+  },
+  "checkpoints": [
+    "C:\\Users\\Hoffmann\\Desktop\\Deep-Learning-UTT\\outputs\\pipeline_dl\\checkpoints\\etapa14_fast_cnn1d_442b81e2_loso_val_02_best.pt",
+    "C:\\Users\\Hoffmann\\Desktop\\Deep-Learning-UTT\\outputs\\pipeline_dl\\checkpoints\\etapa14_fast_cnn1d_442b81e2_loso_val_03_best.pt",
+    "C:\\Users\\Hoffmann\\Desktop\\Deep-Learning-UTT\\outputs\\pipeline_dl\\checkpoints\\etapa14_fast_cnn1d_442b81e2_loso_val_08_best.pt",
+    "C:\\Users\\Hoffmann\\Desktop\\Deep-Learning-UTT\\outputs\\pipeline_dl\\checkpoints\\etapa14_fast_cnn1d_442b81e2_loso_val_09_best.pt",
+    "C:\\Users\\Hoffmann\\Desktop\\Deep-Learning-UTT\\outputs\\pipeline_dl\\checkpoints\\etapa14_fast_cnn1d_442b81e2_loso_val_12_best.pt",
+    "C:\\Users\\Hoffmann\\Desktop\\Deep-Learning-UTT\\outputs\\pipeline_dl\\checkpoints\\etapa14_fast_cnn1d_442b81e2_loso_val_13_best.pt",
+    "C:\\Users\\Hoffmann\\Desktop\\Deep-Learning-UTT\\outputs\\pipeline_dl\\checkpoints\\etapa14_fast_cnn1d_442b81e2_loso_val_14_best.pt"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "started_at": "2026-06-24T10:17:32",
+  "refine_top_k": 5,
+  "skip_refine": true,
+  "stability_seeds": true,
+  "pruning": true,
+  "smoke_test": false,
+  "backend": "directml",
+  "training": {
+    "loss": "huber",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "huber_delta": 1.0,
+    "batch_size": 32,
+    "max_epochs": 300,
+    "patience": 30,
+    "min_delta": 0.0001,
+    "dropout": 0.2,
+    "num_workers": 6,
+    "pin_memory": false,
+    "use_amp": false
+  }
+}

@@ -1,0 +1,5 @@
+train_seconds=3.26
+best_epoch=1
+best_val_loss=1.086757
+best_val_rmse_cm=2.1360
+epochs_run=9

@@ -1,0 +1,45 @@
+{
+  "started_at": "2026-06-25T17:26:52",
+  "runtime": {
+    "device_request": "directml",
+    "device_effective": "privateuseone:0",
+    "backend": "directml",
+    "device_description": "GPU AMD via DirectML (DirectX 12)",
+    "cpu_full_throttle": false,
+    "num_threads": 6,
+    "num_interop_threads": 6,
+    "num_workers": 6,
+    "pin_memory": false,
+    "gpu_name": "DirectML",
+    "gpu_memory_total_gb": null,
+    "torch_version": "2.4.1+cpu",
+    "torch_version_cuda": null,
+    "torch_version_hip": null
+  },
+  "training": {
+    "max_epochs": 300,
+    "patience": 30,
+    "min_delta": 0.0001,
+    "weight_decay": 0.0001,
+    "num_workers": 6,
+    "pin_memory": false,
+    "use_amp": false
+  },
+  "flags": {
+    "best_quality": true,
+    "smoke_test": false,
+    "run_default_loso_before_search": false,
+    "hyperparams": "fast",
+    "refine_top_k": 5,
+    "skip_refine": false,
+    "stability_seeds": true,
+    "pruning": true,
+    "baselines": false,
+    "diagnostics": true,
+    "calibrate_from_loso": false,
+    "resume": false
+  },
+  "finished_at": "2026-06-25T17:30:44",
+  "elapsed_seconds": 232.01,
+  "elapsed_human": "3m 52s"
+}

@@ -1,0 +1,47 @@
+{
+  "created_at": "2026-06-24T10:17:31",
+  "python_version": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "torch_version": "2.4.1+cpu",
+  "device": "privateuseone:0",
+  "runtime": {
+    "device_request": "directml",
+    "device_effective": "privateuseone:0",
+    "backend": "directml",
+    "device_description": "GPU AMD via DirectML (DirectX 12)",
+    "cpu_full_throttle": false,
+    "num_threads": 6,
+    "num_interop_threads": 6,
+    "num_workers": 6,
+    "pin_memory": false,
+    "gpu_name": "DirectML",
+    "gpu_memory_total_gb": null,
+    "torch_version": "2.4.1+cpu",
+    "torch_version_cuda": null,
+    "torch_version_hip": null
+  },
+  "config": {
+    "project_root": "C:\\Users\\Hoffmann\\Desktop\\Deep-Learning-UTT",
+    "data_dir": "C:\\Users\\Hoffmann\\Desktop\\Deep-Learning-UTT\\Input_ML",
+    "output_dir": "C:\\Users\\Hoffmann\\Desktop\\Deep-Learning-UTT\\outputs\\pipeline_dl",
+    "seed": 42,
+    "time_col": "time",
+    "feature_cols": [
+      "acc_x",
+      "acc_y",
+      "acc_z",
+      "gyro_x",
+      "gyro_y",
+      "gyro_z"
+    ],
+    "target_col": "vicon",
+    "dev_ratio": 0.7,
+    "sampling_hz": 60.0,
+    "window_seconds": 2.0,
+    "stride_seconds": 1.0,
+    "target_mode": "curve",
+    "model_type": "tcn",
+    "window_samples": 120,
+    "stride_samples": 60,
+    "n_input_channels": 6
+  }
+}

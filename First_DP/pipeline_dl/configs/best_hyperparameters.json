@@ -1,0 +1,31 @@
+{
+  "selected_at": "2026-06-25T16:03:36",
+  "selection_criterion": "composite_score (MAE + std + bias + slope + RMSE/RMS por janela)",
+  "best_trial_id": "stab_tcn_9d3ea2d0",
+  "best_description": "ref_tcn_2e1e1355",
+  "mean_mae": 1.1428059912180757,
+  "std_mae": 0.18000572119624225,
+  "experiment": {
+    "model_type": "tcn",
+    "window_seconds": 2.5,
+    "stride_seconds": 0.25,
+    "window_samples": 150,
+    "stride_samples": 15,
+    "target_mode": "curve",
+    "sampling_hz": 60.0
+  },
+  "training": {
+    "loss": "mse",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "huber_delta": 1.0,
+    "batch_size": 16,
+    "max_epochs": 300,
+    "patience": 30,
+    "min_delta": 0.0001,
+    "dropout": 0.1,
+    "num_workers": 6,
+    "pin_memory": false,
+    "use_amp": false
+  }
+}

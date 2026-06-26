@@ -1,0 +1,16 @@
+# GPU AMD no Windows — DirectML (ex.: RX 7600)
+# Requer Python 3.11 (torch-directml NÃO suporta 3.12+)
+#
+# Setup:
+#   py -3.11 -m venv .venv
+#   .venv\Scripts\activate
+#   pip install -r requirements-amd.txt
+#
+# NÃO instale torch separadamente — torch-directml puxa o PyTorch compatível.
+
+torch-directml
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+matplotlib>=3.7.0
+scipy>=1.11.0

@@ -1,0 +1,23 @@
+# Pipeline UTT Deep Learning — dependências básicas (CPU ou GPU genérica)
+#
+# Instalação:
+#   python -m venv .venv
+#   .venv\Scripts\activate        # Windows
+#   pip install -r requirements.txt
+#
+# Para GPU AMD no Windows (DirectML), use requirements-amd.txt em vez deste
+# para o pacote torch/torch-directml — veja README_RUN.md.
+
+torch>=2.0.0
+pandas>=2.0.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+matplotlib>=3.7.0
+scipy>=1.11.0
+
+# --- Opcional: GPU AMD Windows (DirectML) ---
+# NÃO instale torch daqui se for usar DirectML.
+# Use: pip install -r requirements-amd.txt
+# Requer Python 3.11 (torch-directml não suporta 3.12+)
+#
+# torch-directml

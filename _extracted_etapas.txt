@@ -1,0 +1,1635 @@
+
+
+======================================================================
+ETAPA 1
+======================================================================
+
+# Etapa 1 — Preparação inicial do ambiente
+
+## 1. O conceito, de forma simples
+
+Antes de tocar nos dados ou treinar qualquer modelo, você monta a **base do laboratório**: importa as ferramentas, fixa a **semente aleatória** (para repetir resultados), escolhe onde o PyTorch vai calcular (CPU, GPU NVIDIA ou MPS no Mac), define **parâmetros fixos do experimento** e cria **pastas organizadas** para salvar resultados.
+
+É como preparar bancada, instrumentos e caderno de protocolo antes de uma medição — nada de análise ainda, só garantir que tudo está no lugar certo.
+
+---
+
+## 2. Por que isso importa no seu problema
+
+No seu caso (IMU do smartphone → deslocamento Vicon), o pipeline terá muitas decisões encadeadas: split 70/30 por sujeito, LOSO, normalização sem vazamento, janelas temporais, CNN/TCN, métricas clínicas.
+
+Sem essa etapa inicial, você corre risco de:
+
+- resultados **irreproduzíveis** (cada execução dá um número diferente);
+- treinar na **GPU errada** ou na CPU sem perceber;
+- perder **configuração** (qual janela? qual seed? quais sujeitos no teste?);
+- misturar arquivos de **vários experimentos** na mesma pasta.
+
+A Etapa 1 **não carrega dados** de propósito: primeiro você define *onde* e *como* o experimento vai rodar; na Etapa 3 você lê os arquivos.
+
+No seu projeto, os dados já existem em Input_ML/ (ex.: 02_alinhado_ml.csv). O script aponta para lá, mas **não os abre** nesta etapa.
+
+---
+
+## 3. Código Python/PyTorch
+
+O módulo foi criado em pipeline/etapa01_setup.py. Estrutura principal:
+
+[diagrama omitido — ver scripts do pipeline]
+
+Para executar **somente** esta etapa:
+
+[diagrama omitido — ver scripts do pipeline]
+
+Na sua máquina, a execução confirmou: Python 3.12.3, PyTorch 2.11.0, dispositivo cpu, saída em outputs/pipeline_dl/.
+
+---
+
+## 4. Comentário didático do código
+
+| Bloco | O que faz | Por quê |
+|---|---|---|
+| set_seed() | Fixa random, NumPy e PyTorch | Split de sujeitos, inicialização de pesos e shuffle ficam repetíveis |
+| get_device() | Escolhe CUDA → MPS → CPU | O mesmo código roda em Mac, PC com NVIDIA ou só CPU |
+| ExperimentConfig | Dataclass com todos os parâmetros | Um único objeto evita variáveis soltas; será expandido nas próximas etapas |
+| data_dir | Caminho para Input_ML/ | Um arquivo = um sujeito (Etapa 2 e 3) |
+| dev_ratio = 0.70 | Placeholder para split externo | Etapa 5 usará isso sem misturar sujeitos |
+| create_output_dirs() | Cria subpastas nomeadas | Separa modelos, métricas, gráficos, splits e scalers |
+| save_config_snapshot() | Grava JSON com versões e config | Reprodutibilidade para artigo/tese (Etapa 19) |
+| Imports de sklearn, matplotlib | Só validam o ambiente | Serão usados nas Etapas 4, 6 e 16 — importar cedo revela dependências faltando |
+
+**Observação sobre nomes de colunas:** seus arquivos reais usam nomes como Time, accX_m_s2, vicon_esternoZ_cm. A config usa nomes genéricos (time, acc_x, vicon) como contrato do pipeline; na **Etapa 2** mapearemos os nomes reais para esse padrão.
+
+---
+
+## 5. Principais erros a evitar
+
+1. **Pular a semente** — resultados diferentes a cada execução, impossível comparar modelos.
+2. **Hardcodar caminhos absolutos** — use Path(__file__).parent para o projeto funcionar em qualquer máquina.
+3. **Carregar dados nesta etapa** — qualquer olhada nos dados antes do split 70/30 aumenta risco de vazamento inconsciente.
+4. **Misturar saídas de experimentos** — sempre use subpastas com timestamp ou nome do experimento.
+5. **Assumir GPU disponível** — sempre verifique get_device(); no seu Mac pode ser MPS ou CPU.
+6. **Não salvar a configuração** — sem JSON de config, você não sabe qual janela/seed foi usada meses depois.
+7. **Importar tudo dentro do loop de treino** — imports no topo do arquivo são mais claros e rápidos.
+8. **Confundir setup com treino** — esta etapa não cria janelas, não normaliza, não faz split.
+
+---
+
+## O que fica pronto após a Etapa 1
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+Quando quiser seguir, peça a **Etapa 2** — estrutura esperada dos arquivos, extração de subject_id pelo nome do arquivo e diferença entre prever amplitude escalar vs. curva do Vicon.
+
+[REDACTED]
+
+
+======================================================================
+ETAPA 2
+======================================================================
+
+# Etapa 2 — Estrutura esperada dos arquivos
+
+## 1. O conceito, de forma simples
+
+Antes de ler ou treinar qualquer coisa, você define o **contrato dos dados**: o que cada arquivo deve conter, como identificar o sujeito e o que o modelo vai prever.
+
+No seu caso:
+
+- **1 arquivo = 1 sujeito**
+- **8 colunas obrigatórias** (tempo + 6 canais IMU + Vicon)
+- **subject_id** vem do nome do arquivo (ex.: 02_alinhado_ml.csv → "02")
+- **dois modos possíveis de alvo**: amplitude escalar ou curva temporal do Vicon
+
+É como conferir o formulário de coleta antes de abrir as planilhas: você sabe o que esperar e detecta problemas cedo.
+
+---
+
+## 2. Por que isso importa no seu problema
+
+Sem esse contrato explícito, erros comuns aparecem tarde demais:
+
+| Risco | Consequência |
+|---|---|
+| Coluna com nome diferente (Time vs time) | Leitura falha ou usa coluna errada |
+| Dois sujeitos com o mesmo subject_id | Vazamento no split 70/30 e no LOSO |
+| Confundir amplitude com curva | Arquitetura e loss incompatíveis |
+| Misturar janelas de sujeitos diferentes | Generalização falsa |
+
+Seus arquivos reais em Input_ML/ usam nomes como Time, accX_m_s2, vicon_esternoZ_cm. O pipeline trabalha internamente com nomes canônicos (time, acc_x, vicon) e faz o **mapeamento** automaticamente.
+
+Foram encontrados **27 arquivos** (sujeitos 01 a 29, com alguns números ausentes).
+
+---
+
+## 3. Código Python
+
+Módulo criado em pipeline/etapa02_schema.py. Blocos principais:
+
+### Contrato de colunas
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Extração de subject_id
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Dois modos de alvo
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Validação de colunas
+
+[diagrama omitido — ver scripts do pipeline]
+
+Para executar **somente** esta etapa:
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 4. Comentário didático do código
+
+**REQUIRED_COLUMNS** — lista canônica que o pipeline espera internamente. Separa claramente:
+- time: eixo temporal (não entra no modelo)
+- 6 colunas IMU: **entradas** do modelo
+- vicon: **referência** (alvo)
+
+**COLUMN_ALIASES** — traduz nomes reais dos seus CSVs para o padrão interno. Na Etapa 3, após pd.read_csv, você chama rename_columns_to_canonical(df) ou usa resolve_column_names para saber qual coluna original corresponde a cada canônica.
+
+**extract_subject_id** — como não há coluna subject_id nos arquivos, o identificador vem do nome:
+- numeric_prefix (padrão): "02_alinhado_ml.csv" → "02" — ideal para split por sujeito
+- stem: usa o nome completo — mais seguro se os arquivos tiverem nomes heterogêneos
+
+**list_expected_subject_files** — lista arquivos .csv/.xlsx na pasta **sem abrir o conteúdo**. Só inspeciona nomes e extensões.
+
+**validate_required_columns** — recebe um DataFrame e verifica se todas as colunas obrigatórias existem (direto ou via alias). Retorna um objeto estruturado em vez de falhar silenciosamente.
+
+### Amplitude escalar vs. curva do Vicon
+
+| | **Amplitude** | **Curva** |
+|---|---|---|
+| O que prediz | 1 número por janela | Sequência inteira do Vicon |
+| Exemplo de y | max - min = 3,2 cm | [0.0, 0.5, 1.0, ..., 2.8] |
+| Formato PyTorch | (batch, 1) | (batch, window_size) |
+| Dificuldade | Menor — bom ponto de partida | Maior — exige mais dados e modelo mais capaz |
+| Interpretação | "Quanto o ponto se moveu nesse intervalo?" | "Qual foi a trajetória exata?" |
+
+Para o seu objetivo inicial (estimar deslocamento/amplitude), comece com **amplitude**.
+
+---
+
+## 5. Principais erros a evitar
+
+1. **Assumir nomes de colunas fixos** — sempre use mapeamento/aliases; seus arquivos usam Time, não time.
+2. **Usar índice da linha como sujeito** — o sujeito vem do **arquivo**, não da linha.
+3. **subject_id duplicado** — dois arquivos gerando o mesmo id quebram o split 70/30 e o LOSO.
+4. **Validar colunas só no primeiro arquivo** — cada arquivo deve ser checado na Etapa 3.
+5. **Confundir time com feature** — tempo organiza a série, mas **não entra** nas 6 entradas do modelo.
+6. **Começar predizendo a curva inteira** — mais difícil; amplitude escalar é o caminho mais sólido para validar o pipeline.
+7. **Carregar todos os dados nesta etapa** — aqui só definimos o contrato; leitura completa é Etapa 3.
+8. **Ignorar unidades** — seus dados estão em m/s², rad/s e cm (Vicon); documente isso para interpretar métricas depois.
+
+---
+
+## O que fica pronto após a Etapa 2
+
+[diagrama omitido — ver scripts do pipeline]
+
+Funções prontas para a Etapa 3:
+- list_expected_subject_files() — listar arquivos e subject_ids
+- validate_required_columns() — checar colunas após leitura
+- rename_columns_to_canonical() — padronizar nomes
+
+---
+
+Quando quiser seguir, peça a **Etapa 3** — leitura de todos os arquivos, conferência de tamanho, valores ausentes e estrutura por sujeito (ainda sem split).
+
+[REDACTED]
+
+
+======================================================================
+ETAPA 3
+======================================================================
+
+# Etapa 3 — Leitura dos arquivos por sujeito
+
+## 1. O conceito, de forma simples
+
+Depois de definir o contrato (Etapa 2), você **abre cada arquivo** e organiza os dados em uma estrutura clara: **um sujeito → um DataFrame**.
+
+Para cada arquivo, o pipeline:
+1. Lê o conteúdo (CSV ou XLSX)
+2. Verifica se as colunas obrigatórias existem
+3. Renomeia para o padrão canônico (time, acc_x, …, vicon)
+4. Adiciona subject_id e source_file
+5. Conta linhas e valores ausentes
+
+Nada de split, normalização ou janelas ainda — só **carregar e inspecionar**.
+
+---
+
+## 2. Por que isso importa no seu problema
+
+Com 27 arquivos e ~53 mil amostras no total, erros de leitura passariam despercebidos até o treino:
+
+| Checagem | O que evita |
+|---|---|
+| Colunas obrigatórias | Treinar com feature faltando |
+| subject_id único por arquivo | Misturar sujeitos no split 70/30 |
+| Contagem de linhas | Sujeito com gravação truncada |
+| Valores ausentes | NaN propagando para loss e métricas |
+| Ordenação por time | Janelas temporais incoerentes |
+
+A estrutura LoadedDataset guarda cada sujeito separado — base para split por sujeito (Etapa 5) e LOSO (Etapa 13).
+
+---
+
+## 3. Código Python/PyTorch
+
+Módulo criado em pipeline/etapa03_load.py.
+
+### Leitura por extensão
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Estrutura por sujeito
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Carregar um sujeito
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Carregar todos
+
+[diagrama omitido — ver scripts do pipeline]
+
+Executar somente esta etapa:
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 4. Comentário didático do código
+
+**read_subject_table** — ponto único de leitura; suporta CSV e Excel sem duplicar lógica.
+
+**validate_required_columns_strict** — reutiliza a Etapa 2; falha cedo se faltar coluna, com mensagem clara por arquivo.
+
+**rename_columns_to_canonical** — traduz Time → time, accX_m_s2 → acc_x, etc. O pipeline passa a usar sempre os mesmos nomes.
+
+**Seleção de colunas** — após renomear, mantém só REQUIRED_COLUMNS + metadados. Colunas extras do CSV são descartadas para evitar confusão.
+
+**subject_id como coluna** — cada linha sabe a qual sujeito pertence; útil se concatenar para inspeção, mas o split continuará sendo **por sujeito**, não por linha.
+
+**LoadedDataset.subjects** — dicionário {subject_id: SubjectRecord} é a estrutura central. Na Etapa 5, você passará listas de IDs para treino/teste sem tocar nos DataFrames dos outros grupos.
+
+**LoadSummary** — estatísticas agregadas sem misturar os dados: total de sujeitos, min/mediana/max de amostras, quem tem missing.
+
+**strict_duplicates=True** — dois arquivos gerando o mesmo subject_id (ex.: 02_a.csv e 02_b.csv) geram erro imediato.
+
+---
+
+## 5. Resultado na sua base real
+
+| Métrica | Valor |
+|---|---|
+| Arquivos lidos | 27 |
+| Sujeitos | 27 (IDs 01–29, faltam 05 e 07) |
+| Amostras totais | 53 226 |
+| Amostras/sujeito | min=1 325, mediana=1 982, max=2 198 |
+| Duração típica | ~33 s por sujeito (~60 Hz) |
+| Valores ausentes | **nenhum** nas 8 colunas obrigatórias |
+| Sujeito menor | 26 — 1 325 amostras (~22 s) |
+
+Colunas finais em cada DataFrame:
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 6. Principais erros a evitar
+
+1. **Concatenar tudo e esquecer subject_id** — sem identificador, o split por sujeito fica impossível.
+2. **Não validar cada arquivo** — um CSV corrompido pode quebrar o treino horas depois.
+3. **Assumir mesma quantidade de linhas** — seus sujeitos variam de 1 325 a 2 198 amostras.
+4. **Ignorar subject_id duplicado** — dois arquivos com prefixo 02 colapsariam num único sujeito.
+5. **Normalizar nesta etapa** — normalização vem na Etapa 6, dentro de cada fold.
+6. **Fazer split agora** — primeiro carregar tudo; separar grupos na Etapa 5.
+7. **Usar índice da linha como tempo** — use a coluna time; ela define a ordem temporal real.
+8. **Descartar metadados** — source_file ajuda a rastrear problemas até a publicação.
+
+---
+
+## O que fica pronto após a Etapa 3
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+Quando quiser seguir, peça a **Etapa 4** — conferência pós-alinhamento (tempo crescente, frequência de amostragem, buracos temporais, igualdade smartphone/Vicon e plots de inspeção visual).
+
+[REDACTED]
+
+
+======================================================================
+ETAPA 4
+======================================================================
+
+# Etapa 4 — Conferência pós-alinhamento e qualidade dos sinais
+
+## 1. O conceito, de forma simples
+
+Você já carregou os dados (Etapa 3) e assume que **cada linha** traz IMU e Vicon no **mesmo instante**. Agora confere se essa premissa se sustenta:
+
+- o tempo avança de forma ordenada?
+- a taxa de amostragem é estável (~60 Hz)?
+- existem buracos no tempo?
+- IMU e Vicon têm o mesmo número de amostras?
+- os sinais parecem coerentes visualmente?
+
+É uma **vistoria de qualidade** antes de dividir sujeitos e treinar — sem filtros pesados, sem normalização, sem split.
+
+---
+
+## 2. Por que isso importa no seu problema
+
+Modelos temporais (CNN 1D, TCN) assumem que cada janela é uma sequência **regular e contínua**. Problemas silenciosos na base contaminam tudo depois:
+
+| Problema | Efeito no modelo |
+|---|---|
+| Tempo não crescente | Janelas com ordem errada |
+| Buracos temporais | Janela de "2 s" cobre mais tempo real |
+| Frequência instável | Tamanho de janela em amostras perde sentido físico |
+| IMU e Vicon desalinhados | O modelo aprende relação espúria |
+| Sinal com artefato óbvio | Erro alto em sujeitos específicos |
+
+Esta etapa inspeciona **todos os sujeitos igualmente**. Ainda não existe grupo de teste — portanto não há risco de vazamento por olhar dados de teste.
+
+---
+
+## 3. Código Python
+
+Módulo criado em pipeline/etapa04_quality.py.
+
+### Checagens temporais
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Alinhamento IMU × Vicon
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Plot de inspeção (sem filtros)
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Execução
+
+[diagrama omitido — ver scripts do pipeline]
+
+Ou integrado ao pipeline anterior:
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 4. Comentário didático do código
+
+**compute_dt** — calcula intervalos entre amostras consecutivas. A **mediana** de dt é robusta a outliers pontuais (melhor que a média para estimar fs).
+
+**check_time_monotonic** — detecta tempos duplicados ou retrocesso. Um único time[i+1] <= time[i] indica problema de alinhamento ou exportação.
+
+**find_temporal_gaps** — um "buraco" é definido como dt > 2 × mediana(dt). Com 60 Hz, dt mediano ≈ 0,0167 s; qualquer intervalo > ~0,033 s seria sinalizado. O fator 2 é conservador e ajustável.
+
+**check_imu_vicon_alignment** — no seu formato (uma linha = um instante), IMU e Vicon **compartilham o índice temporal**. A checagem confirma que não há linhas com IMU válido e Vicon ausente (ou vice-versa).
+
+**analyze_subject_quality** — agrega checagens num SubjectQualityReport com lista de warnings. Facilita identificar sujeitos problemáticos antes do treino.
+
+**plot_subject_signals** — plota a **norma da aceleração** (resumo do smartphone) e o **Vicon bruto**. Sem filtros — o objetivo é ver forma, escala e possível dessincronia visual. Se os padrões de movimento no Vicon coincidem temporalmente com picos de aceleração, o alinhamento prévio parece correto.
+
+**Plots de exemplo** — gera gráficos para 3 sujeitos (primeiro, mediano, último) sem favorecer futuro grupo de teste.
+
+---
+
+## 5. Resultado na sua base real
+
+| Métrica | Resultado |
+|---|---|
+| Sujeitos analisados | 27 |
+| Sem alertas | **27 / 27** |
+| Frequência estimada | **60,00 Hz** em todos (dt = 1/60 ≈ 0,0167 s) |
+| Tempo crescente | Sim, em todos |
+| Buracos temporais | Nenhum |
+| IMU = Vicon (contagem) | Sim, em todos |
+| Duração | 22–37 s por sujeito (sujeito 26 é o mais curto) |
+
+Plots salvos em:
+- outputs/pipeline_dl/plots/etapa04_sinais_sujeito_01.png
+- outputs/pipeline_dl/plots/etapa04_sinais_sujeito_16.png
+- outputs/pipeline_dl/plots/etapa04_sinais_sujeito_29.png
+
+**Conclusão:** os dados alinhados estão consistentes para avançar. A frequência de 60 Hz confirma o placeholder sampling_hz=60.0 da config — na Etapa 7, janela de 2 s = **120 amostras**.
+
+---
+
+## 6. Principais erros a evitar
+
+1. **Aplicar filtro passa-banda agora** — pode mascarar problemas de alinhamento; filtrar só com justificativa física e documentada.
+2. **Descartar sujeitos com base em performance futura** — nesta etapa só critérios de qualidade objetivos (tempo, buracos, contagem).
+3. **Usar índice da linha como tempo** — sempre a coluna time real.
+4. **Assumir 60 Hz sem medir** — sempre estime fs dos dados; aqui confirmou 60 Hz.
+5. **Ignorar sujeito com gravação curta** — sujeito 26 (~22 s) gera menos janelas; anotar, não excluir automaticamente.
+6. **Confundir alinhamento com normalização** — alinhamento é temporal; normalização é escala (Etapa 6).
+7. **Plotar só um sujeito** — padrões variam; inspecione pelo menos 3.
+8. **Corrigir dados olhando o grupo de teste** — quando o split existir (Etapa 5), decisões de limpeza devem usar só o grupo de desenvolvimento.
+
+---
+
+## O que fica pronto após a Etapa 4
+
+[diagrama omitido — ver scripts do pipeline]
+
+Funções prontas para reutilizar:
+- analyze_subject_quality(record) — relatório por sujeito
+- analyze_all_subjects(dataset) — resumo agregado
+- plot_subject_signals(record) — inspeção visual
+
+---
+
+Quando quiser seguir, peça a **Etapa 5** — split externo 70/30 por sujeito, salvando listas de IDs de desenvolvimento e teste final intocado.
+
+[REDACTED]
+
+
+======================================================================
+ETAPA 5
+======================================================================
+
+# Etapa 5 — Separação externa 70/30 por sujeito
+
+## 1. O conceito, de forma simples
+
+Até aqui você carregou e inspecionou **todos** os sujeitos juntos. Agora separa **quem serve para desenvolver o modelo** de **quem serve para avaliação final**.
+
+A regra é uma só: o split é por **sujeito**, nunca por linha ou janela.
+
+- **70% → desenvolvimento** — normalização, LOSO, escolha de hiperparâmetros e treino interno
+- **30% → teste final** — intocado até a Etapa 15
+
+Cada sujeito inteiro vai para um único grupo. Nenhum subject_id aparece nos dois.
+
+---
+
+## 2. Por que isso importa no seu problema
+
+Sinais IMU de um mesmo indivíduo compartilham postura, ritmo, telefone e contexto. Se janelas do sujeito 02 entram no treino e no teste, o modelo **já viu padrões daquele corpo** — a métrica fica otimista e não mede generalização.
+
+| Split errado | Consequência |
+|---|---|
+| Por janela/amostra | Vazamento entre treino e teste |
+| Normalizar com todos os sujeitos | Estatísticas do teste influenciam o treino |
+| Ajustar hiperparâmetros olhando o teste | Overfitting ao conjunto de avaliação |
+| Não salvar a lista de sujeitos | Impossível reproduzir o experimento |
+
+O grupo de **teste final** definido agora permanece **congelado** até a Etapa 15.
+
+---
+
+## 3. Código Python
+
+Módulo criado em pipeline/etapa05_split.py.
+
+### Split por sujeito
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Isolar datasets sem janelas
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Salvar para reprodutibilidade
+
+[diagrama omitido — ver scripts do pipeline]
+
+Executar somente esta etapa:
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 4. Comentário didático do código
+
+**split_subjects_external** — embaralha a lista de subject_id com semente fixa e corta em ~70%/30%. O embaralhamento é sobre **sujeitos**, não sobre linhas. Com 27 sujeitos: round(27 × 0,70) = 19 para dev e 8 para teste.
+
+**SubjectSplit.validate()** — três checagens automáticas:
+1. interseção dev ∩ teste = ∅
+2. sem IDs duplicados dentro de cada grupo
+3. dev ∪ teste = todos os sujeitos
+
+**subset_dataset_by_subjects** — cria um LoadedDataset filtrado mantendo os DataFrames intactos. Ainda **sem normalização** e **sem janelas** — só separação lógica.
+
+**save_subject_split** — grava JSON com metadados (seed, frações, data) e TXTs com um ID por linha. Essencial para reprodutibilidade e para a Etapa 15 carregar o mesmo split.
+
+**load_subject_split** — permite recriar o split nas etapas seguintes sem recalcular.
+
+---
+
+## 5. Resultado na sua base real
+
+| Grupo | Sujeitos | Fração |
+|---|---|---|
+| **Desenvolvimento** | 02, 03, 08, 09, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 25, 27, 28, 29 | 19/27 = **70,4%** |
+| **Teste final** | 01, 04, 06, 10, 11, 23, 24, 26 | 8/27 = **29,6%** |
+
+Semente: 42 (mesma da Etapa 1).
+
+Arquivos salvos:
+- outputs/pipeline_dl/splits/external_split_70_30.json
+- outputs/pipeline_dl/splits/dev_subject_ids.txt
+- outputs/pipeline_dl/splits/test_subject_ids.txt
+
+---
+
+## 6. Principais erros a evitar
+
+1. **Split por janela** — janelas do mesmo sujeito nos dois grupos invalidam a avaliação.
+2. **Recalcular o split a cada execução sem salvar** — use os arquivos em splits/.
+3. **Olhar métricas do teste antes da Etapa 15** — qualquer ajuste motivado pelo teste é vazamento.
+4. **Normalizar agora usando todos os sujeitos** — normalização vem na Etapa 6, **só com dados de treino de cada fold**.
+5. **Criar janelas antes do split** — grupos de sujeitos devem estar definidos primeiro (feito aqui).
+6. **Mudar a semente depois** — altera quem vai para teste; documente e mantenha fixa.
+7. **Excluir sujeito 26 por ser mais curto** — decisões de exclusão devem usar critérios objetivos e, depois do split, **apenas no grupo dev**.
+
+---
+
+## O que fica pronto após a Etapa 5
+
+[diagrama omitido — ver scripts do pipeline]
+
+A partir daqui:
+- Etapas 6–14 → **apenas** dev_subject_ids
+- Etapa 15 → treino final nos 19 dev, avaliação **uma única vez** nos 8 de teste
+
+---
+
+Quando quiser seguir, peça a **Etapa 6** — normalização sem vazamento (scaler ajustado só no treino de cada fold, discussão sobre normalizar ou não o alvo Vicon).
+
+[REDACTED]
+
+
+======================================================================
+ETAPA 6
+======================================================================
+
+# Etapa 6 — Normalização sem vazamento
+
+## 1. O conceito, de forma simples
+
+Redes neurais aprendem melhor quando as entradas estão em escalas parecidas. **Normalizar** transforma cada canal (acc_x, acc_y, …) para algo próximo de média 0 e desvio 1.
+
+A regra crítica: o escalador aprende parâmetros (média e desvio) **somente com dados de treino do fold**. Validação e teste recebem a **mesma transformação**, sem participar do .fit().
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 2. Por que isso importa no seu problema
+
+### Por que normalizar com todos os sujeitos é erro
+
+Se você calcula média/desvio usando **todos** os 27 sujeitos (incluindo teste final):
+
+- estatísticas do grupo de **teste** influenciam o treino;
+- métricas de validação ficam **otimistas**;
+- o modelo não simula uso real (novo sujeito nunca visto).
+
+### No seu pipeline
+
+| Momento | Quem entra no .fit() |
+|---|---|
+| Cada fold LOSO (Etapas 6–13) | 18 sujeitos dev de treino (ex.: todos exceto 02) |
+| Validação do fold | 1 sujeito dev (ex.: 02) — só transform() |
+| Teste final (Etapa 15) | 19 sujeitos dev — **nunca** os 8 de teste no fit |
+
+### Normalizar o alvo vicon?
+
+| Opção | Vantagem | Desvantagem |
+|---|---|---|
+| **Sim** (recomendado para treino) | Loss numérica mais estável | Métricas precisam voltar para cm |
+| **Não** | MAE/RMSE direto em cm | Escala do alvo pode dominar a loss |
+
+Se normalizar o vicon, use inverse_transform_target() antes de reportar MAE clínico em centímetros.
+
+---
+
+## 3. Código Python
+
+Módulo criado em pipeline/etapa06_normalize.py.
+
+### Ajustar escalador (só treino do fold)
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Aplicar sem reajustar
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Reverter predições do vicon para cm
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Fold LOSO completo (exemplo)
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Alternativa manual (z-score por canal)
+
+[diagrama omitido — ver scripts do pipeline]
+
+Executar somente esta etapa:
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 4. Comentário didático do código
+
+**collect_columns_matrix** — empilha todas as amostras dos sujeitos de treino numa matriz (N, 6). O StandardScaler vê a distribuição global do treino, não de um único sujeito.
+
+**fit_scaler_bundle** — ajusta dois escaladores independentes:
+- feature_scaler nas 6 entradas IMU (obrigatório)
+- target_scaler no vicon (opcional)
+
+**transform_subject_record** — aplica (x - μ) / σ com μ e σ **fixos** do treino. O sujeito de validação pode ter média ≠ 0 após transformação — isso é **esperado e correto**.
+
+**demonstrate_leakage_contrast** — compara o procedimento errado (fit com validação incluída) vs. correto. As médias diferem; incluir validação no fit contamina os parâmetros.
+
+**normalize_loso_fold** — encapsula o padrão que será repetido na Etapa 13 para cada fold LOSO.
+
+**ScalerBundle.save/load** — persiste escaladores em outputs/pipeline_dl/scalers/ para reprodutibilidade (Etapa 19).
+
+---
+
+## 5. Resultado no seu fold de exemplo
+
+Fold: **LOSO com sujeito 02 fora** (18 sujeitos dev no treino)
+
+**Treino após normalizar** (deve ficar ~0 e ~1):
+
+| canal | média | desvio |
+|---|---|---|
+| acc_x … gyro_z | ≈ 0,0000 | ≈ 1,0000 |
+
+**Validação (02)** com parâmetros do treino (média pode ≠ 0):
+
+| canal | média | desvio |
+|---|---|---|
+| acc_x | -0,53 | 0,75 |
+| acc_z | 1,59 | 0,57 |
+| … | … | … |
+
+Isso indica que o sujeito 02 tem perfil de sinal diferente da média do treino — comportamento normal em LOSO.
+
+**Inversão do alvo** (3 pontos ilustrativos):
+- escalado: [-0.899, -0.901, -0.903]
+- em cm: [0.000, -0.004, -0.013]
+
+Arquivos salvos:
+- outputs/pipeline_dl/scalers/loso_val_02_scaler.joblib
+- outputs/pipeline_dl/scalers/loso_val_02_meta.json
+
+---
+
+## 6. Principais erros a evitar
+
+1. **.fit() com todos os sujeitos** — incluindo validação ou teste final.
+2. **Recalcular scaler por sujeito** — deve ser por **fold de treino**, não por indivíduo.
+3. **Normalizar time** — tempo não é feature; não entra no escalador.
+4. **Esquecer inverse_transform** — se vicon foi escalado, MAE em cm exige reversão.
+5. **Usar estatísticas do teste na Etapa 15** — scaler final: fit só nos 19 dev.
+6. **Misturar normalização e janelamento** — ordem correta: normalizar séries contínuas, **depois** criar janelas (Etapa 7).
+7. **Salvar um único scaler global** — em LOSO, cada fold tem seu próprio ScalerBundle.
+
+---
+
+## O que fica pronto após a Etapa 6
+
+[diagrama omitido — ver scripts do pipeline]
+
+Funções reutilizáveis nas Etapas 7–15:
+- fit_scaler_bundle()
+- transform_dataset()
+- normalize_loso_fold()
+- bundle.inverse_transform_target()
+
+---
+
+Quando quiser seguir, peça a **Etapa 7** — criação de janelas temporais (2 s, 120 amostras, stride, amplitude escalar do Vicon como alvo).
+
+[REDACTED]
+
+
+======================================================================
+ETAPA 7
+======================================================================
+
+# Etapa 7 — Criação de janelas temporais
+
+## 1. O conceito, de forma simples
+
+Até aqui cada sujeito é uma **série contínua** com milhares de linhas. Redes temporais (CNN 1D, TCN) aprendem a partir de **pedaços finitos** dessa série — as **janelas**.
+
+Exemplo com seus parâmetros:
+
+| Parâmetro | Valor | Significado |
+|---|---|---|
+| Frequência | 60 Hz | 60 amostras por segundo |
+| Janela | 2 s | 120 amostras por janela |
+| Stride | 1 s | avança 60 amostras a cada nova janela |
+| Entrada X | 6 × 120 | 6 canais IMU × 120 instantes |
+| Alvo y | 1 número | amplitude = max(vicon) − min(vicon) na janela |
+
+**Stride** controla a sobreposição: stride de 1 s com janela de 2 s → **50% de sobreposição** (cada janela compartilha metade das amostras com a seguinte).
+
+---
+
+## 2. Por que isso importa no seu problema
+
+O modelo não vê a gravação inteira de uma vez — vê janelas de 2 s e precisa inferir quanto o Vicon se moveu **naquele intervalo** a partir do padrão IMU.
+
+| Decisão | Impacto |
+|---|---|
+| Tamanho da janela | Muito curta → pouco contexto; muito longa → movimentos distintos misturados |
+| Stride | Stride grande → menos janelas; stride pequeno → mais janelas, mais correlação entre elas |
+| Amplitude vs curva | Amplitude é mais simples; curva exige prever 120 valores por janela |
+| subject_id por janela | Permite split/LOSO sem misturar sujeitos |
+
+**Ordem correta no pipeline:**
+1. Split por sujeito (Etapa 5)
+2. Normalizar treino do fold + transformar val (Etapa 6)
+3. **Criar janelas** separadamente em treino e val (esta etapa)
+
+---
+
+## 3. Código Python/PyTorch
+
+Módulo criado em pipeline/etapa07_windows.py.
+
+### Extrair janelas de um sujeito
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Amplitude vs curva
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Vários sujeitos (treino de um fold)
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Garantir isolamento por sujeito
+
+[diagrama omitido — ver scripts do pipeline]
+
+Executar somente esta etapa:
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 4. Comentário didático do código
+
+**iter_window_starts** — gera índices [0, 60, 120, …] enquanto início + 120 ≤ n_amostras. Sujeito com 2033 amostras → ~32 janelas.
+
+**X[i] = x_mat[s:e].T** — transpõe para (canais, tempo), que é o layout esperado pelo Conv1d do PyTorch: (batch, canais, tempo).
+
+**compute_window_target** — no modo amplitude, captura o **deslocamento dinâmico** do Vicon na janela (pico − vale). No modo curve, preserva a forma temporal completa.
+
+**subject_ids** — array paralelo a X e y; essencial para saber a qual sujeito cada janela pertence sem ambiguidade.
+
+**create_windows_from_dataset** — processa sujeito a sujeito e concatena. Treino e validação são janelados **separadamente**, cada um com seus próprios sujeitos.
+
+**Por que y ≈ 2,25 neste demo?** — as janelas foram criadas **após normalização** do vicon (Etapa 6). A amplitude está em **escala padronizada**, não em cm. Para interpretação clínica, aplique inverse_transform_target() (Etapa 6) nas predições.
+
+---
+
+## 5. Resultado no fold de exemplo (LOSO, val = sujeito 02)
+
+| Conjunto | Shape X | Shape y | Janelas |
+|---|---|---|---|
+| Treino (18 sujeitos dev) | (573, 6, 120) | (573,) | ~31–32 por sujeito |
+| Validação (sujeito 02) | (32, 6, 120) | (32,) | 32 |
+
+Parâmetros confirmados:
+- Janela: **2 s = 120 amostras**
+- Stride: **1 s = 60 amostras**
+- Sobreposição: **50%**
+- Modo: **amplitude**
+
+Exemplo de alvos (vicon escalado, sujeito 02):
+
+| Janela | t₀ | y (amplitude escalada) |
+|---|---|---|
+| 0 | 0,000 s | 2,2509 |
+| 1 | 1,000 s | 2,2509 |
+| 2 | 2,000 s | 2,2566 |
+
+---
+
+## 6. Principais erros a evitar
+
+1. **Janelar antes do split** — define grupos de sujeitos primeiro (Etapa 5).
+2. **Misturar janelas de treino e val de sujeitos diferentes sem controle** — mantenha lotes separados por fold.
+3. **Perder subject_id** — sem ele, shuffle no DataLoader pode causar vazamento indireto.
+4. **Layout errado para PyTorch** — use (n_janelas, canais, tempo), não (n_janelas, tempo, canais).
+5. **Confundir stride com tamanho da janela** — stride = passo entre janelas; window = tamanho de cada uma.
+6. **Começar com modo curve** — amplitude escalar é o ponto de partida mais sólido.
+7. **Janelar sujeito com gravação curta sem verificar** — se n_amostras < 120, o sujeito gera 0 janelas (sujeito 26 ainda tem 1325 amostras → OK).
+8. **Calcular amplitude em cm e treinar em escala normalizada misturadas** — mantenha coerência entre y e o ScalerBundle do fold.
+
+---
+
+## O que fica pronto após a Etapa 7
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+Quando quiser seguir, peça a **Etapa 8** — Dataset e DataLoader PyTorch (batch, shuffle, formato dos tensores, shuffle só dentro do conjunto correto).
+
+[REDACTED]
+
+
+======================================================================
+ETAPA 8
+======================================================================
+
+# Etapa 8 — Dataset e DataLoader no PyTorch
+
+## 1. O conceito, de forma simples
+
+Na Etapa 7 você produziu arrays NumPy com janelas. Agora eles entram no ecossistema PyTorch:
+
+- **Dataset** — define como acessar **uma janela** por vez (__getitem__)
+- **DataLoader** — agrupa janelas em **mini-batches**, opcionalmente embaralha, e entrega tensores prontos para o modelo
+
+Fluxo de um batch de treino:
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 2. Por que isso importa no seu problema
+
+| Componente | Função no pipeline |
+|---|---|
+| IMUWindowDataset | Padroniza o que o modelo recebe por amostra |
+| collate_fn | Empilha janelas num batch com shape correto |
+| shuffle=True (treino) | Mistura janelas **dentro** do conjunto de treino |
+| shuffle=False (val/test) | Ordem fixa e reprodutível |
+| subject_id no batch | Rastreabilidade por janela (métricas por sujeito) |
+
+O ponto crítico: **shuffle mistura janelas, não sujeitos entre conjuntos**. Treino tem sujeitos {03, 08, …}; validação só {02}. Isso foi garantido nas Etapas 5–7 e verificado aqui.
+
+---
+
+## 3. Código Python/PyTorch
+
+Módulo criado em pipeline/etapa08_dataloader.py.
+
+### Dataset
+
+[diagrama omitido — ver scripts do pipeline]
+
+### DataLoader
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Regras de shuffle
+
+[diagrama omitido — ver scripts do pipeline]
+
+Executar somente esta etapa:
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 4. Comentário didático do código
+
+**IMUWindowDataset** — ponte entre WindowBatch (NumPy) e PyTorch. Converte float32 NumPy → torch.float32 no __getitem__.
+
+**Layout de x** — shape (canais, tempo) por amostra; após o DataLoader vira (batch, canais, tempo). É exatamente o que nn.Conv1d espera.
+
+**collate_imu_windows** — empilha listas de dicts num batch. Também preserva subject_ids como lista de strings (não tensor), útil para debug e métricas por sujeito.
+
+**create_fold_dataloaders** — chama assert_subject_isolation antes de criar loaders. Se treino e val compartilharem sujeito, falha imediatamente.
+
+**verify_loader_subject_pool** — percorre todos os batches e confirma que só aparecem sujeitos permitidos naquele conjunto.
+
+**drop_last** — opcional no treino; se True, descarta o último batch incompleto. Mantido False por padrão para não perder janelas.
+
+**Envio ao device** — demonstração com .to(device); na Etapa 12 isso entra no loop de treino.
+
+---
+
+## 5. Resultado no fold de exemplo (LOSO, val = 02)
+
+| | Treino | Validação |
+|---|---|---|
+| Amostras (janelas) | 573 | 32 |
+| Batches (batch=32) | 18 | 1 |
+| Sujeitos | 18 dev | só 02 |
+| shuffle | True | False |
+
+**Mini-batch de treino:**
+[diagrama omitido — ver scripts do pipeline]
+
+**Mini-batch de validação:**
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 6. Principais erros a evitar
+
+1. **Um único DataLoader para treino + val** — sempre separe por conjunto.
+2. **shuffle=True na validação** — métricas ficam não reprodutíveis.
+3. **Shape (batch, tempo, canais)** — Conv1d exige (batch, canais, tempo).
+4. **Esquecer float32** — use float32 para x e y (GPU e memória).
+5. **Descartar subject_id** — necessário para métricas por sujeito e auditoria de vazamento.
+6. **Batch size maior que o conjunto de val** — com 32 janelas de val e batch=32, há 1 batch; OK aqui, mas com menos janelas ajuste o batch size.
+7. **Misturar sujeitos de teste final no treino** — teste final só entra na Etapa 15, com loader próprio e shuffle=False.
+8. **Confundir shuffle com split** — shuffle não substitui split por sujeito; só reordena janelas já separadas.
+
+---
+
+## O que fica pronto após a Etapa 8
+
+[diagrama omitido — ver scripts do pipeline]
+
+Uso típico no treino (Etapa 12):
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+Quando quiser seguir, peça a **Etapa 9** — modelo CNN 1D inicial (Conv1d, pooling, camada linear, forward pass e por que é um bom primeiro modelo para sinal temporal).
+
+[REDACTED]
+
+
+======================================================================
+ETAPA 9
+======================================================================
+
+# Etapa 9 — Modelo inicial: CNN 1D
+
+## 1. O conceito, de forma simples
+
+Uma **CNN 1D** desliza filtros ao longo do **tempo** (não da imagem) para detectar padrões locais no sinal IMU — picos de aceleração, oscilações, transients — e resume a janela inteira num **único número**: a amplitude predita do Vicon.
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 2. Por que isso importa no seu problema
+
+Integrar aceleração analiticamente falha por drift e orientação. A CNN aprende uma **relação empírica** entre o padrão temporal do IMU e a amplitude medida pelo Vicon.
+
+Por que começar com CNN 1D:
+
+| Vantagem | No contexto IMU → Vicon |
+|---|---|
+| Padrões locais | Impulsos e ciclos de movimento ficam visíveis para filtros temporais |
+| Multicanal | Conv1d mistura acc e gyro no mesmo filtro |
+| Eficiência | Mesmos pesos ao longo da janela — menos parâmetros que LSTM grande |
+| Baseline sólida | Se TCN não superar CNN 1D, a complexidade extra pode não valer |
+
+---
+
+## 3. Código Python/PyTorch
+
+Módulo criado em pipeline/etapa09_cnn1d.py.
+
+### Arquitetura
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Instanciar e forward pass
+
+[diagrama omitido — ver scripts do pipeline]
+
+Executar somente esta etapa:
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 4. Comentário didático do código
+
+**Conv1d(in_channels, out_channels, kernel_size)**
+- in_channels=6 — acc_x…gyro_z
+- out_channels=32 — 32 filtros temporais aprendidos
+- kernel_size=7 — cada filtro enxerga ~7 amostras (~117 ms a 60 Hz)
+
+**padding=kernel_size//2** — mantém o tamanho temporal antes do pooling.
+
+**MaxPool1d(2)** — reduz o tempo pela metade; comprime a informação e aumenta o campo receptivo efetivo.
+
+**AdaptiveAvgPool1d(1)** — média sobre toda a dimensão temporal restante → vetor fixo (128,) por janela, independentemente do tamanho de entrada.
+
+**Linear(128, 64) → Linear(64, 1)** — cabeça de regressão escalar (amplitude).
+
+**Evolução das shapes** (batch=32):
+
+| Etapa | Shape |
+|---|---|
+| entrada | (32, 6, 120) |
+| conv_block_1 | (32, 32, 60) |
+| conv_block_2 | (32, 64, 30) |
+| conv_block_3 | (32, 128, 15) |
+| global_avg_pool | (32, 128, 1) |
+| saída | (32,) |
+
+**Parâmetros:** ~45 000 treináveis — adequado para ~573 janelas de treino no fold de exemplo.
+
+---
+
+## 5. Resultado do forward pass (modelo não treinado)
+
+Com mini-batch real do fold LOSO (val = sujeito 02):
+
+[diagrama omitido — ver scripts do pipeline]
+
+Isso é esperado: a Etapa 9 só valida a **arquitetura e o fluxo de tensores**. O treino vem na Etapa 12.
+
+---
+
+## 6. Principais erros a evitar
+
+1. **Entrada (batch, tempo, canais)** — Conv1d exige (batch, canais, tempo).
+2. **Esquecer .squeeze(-1)** — saída (batch, 1) quebra a loss escalar.
+3. **Kernel maior que a janela após pooling** — após 3 poolings, tempo = 15; kernels 3–7 ainda funcionam.
+4. **Treinar agora sem loop completo** — loss, optimizer e early stopping são Etapa 11–12.
+5. **Comparar predição escalada com MAE em cm** — use inverse_transform_target() se o vicon foi normalizado.
+6. **Pular CNN 1D e ir direto para TCN** — CNN 1D é a baseline de referência (Etapa 10).
+7. **BatchNorm com batch=1 na inferência** — use model.eval(); no treino com batches pequenos, considere ajustar batch size.
+
+---
+
+## O que fica pronto após a Etapa 9
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+Quando quiser seguir, peça a **Etapa 10** — TCN (dilatação, campo receptivo, comparação com CNN 1D e quando a TCN pode ser melhor).
+
+[REDACTED]
+
+
+======================================================================
+ETAPA 10
+======================================================================
+
+# Etapa 10 — Modelo principal: TCN
+
+## 1. O conceito, de forma simples
+
+A **TCN (Temporal Convolutional Network)** usa convoluções **dilatadas** empilhadas para enxergar **mais contexto temporal** sem reduzir a resolução com pooling.
+
+- **Dilatação 1** — filtro olha vizinhos imediatos  
+- **Dilatação 2** — salta 1 amostra entre pesos  
+- **Dilatação 4, 8, 16…** — alcance cresce rapidamente  
+
+Cada **bloco temporal** tem duas convoluções dilatadas + **conexão residual** (entrada + saída), o que facilita treinar pilhas mais profundas.
+
+[diagrama omitido — ver scripts do pipeline]
+
+A resolução temporal permanece **120 amostras** em toda a TCN — diferente da CNN 1D, que comprime com MaxPool.
+
+---
+
+## 2. Por que isso importa no seu problema
+
+Movimentos corporais em 2 s podem ter **fases distantes** relacionadas (aceleração inicial ↔ pico de deslocamento no Vicon). A TCN foi pensada para isso:
+
+| | **CNN 1D (Etapa 9)** | **TCN (Etapa 10)** |
+|---|---|---|
+| Contexto | Local; pooling reduz tempo | Longo; dilatação expande alcance |
+| Resolução temporal | 120 → 60 → 30 → 15 | 120 em todos os blocos |
+| Campo receptivo | ~15–30 amostras finais | **125 amostras** (~2,08 s) |
+| Parâmetros | ~45 k | ~85 k |
+| Risco | Underfitting de contexto | Overfitting se poucos dados |
+
+**Quando a TCN tende a ser melhor:** padrões que dependem de 1–2 s de contexto, relação entre fases distantes do movimento.
+
+**Quando a CNN 1D basta:** padrões muito locais, poucos dados, baseline mais rápida.
+
+---
+
+## 3. Código Python/PyTorch
+
+Módulo criado em pipeline/etapa10_tcn.py.
+
+### Bloco temporal dilatado
+
+[diagrama omitido — ver scripts do pipeline]
+
+### TCN completa
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Campo receptivo
+
+[diagrama omitido — ver scripts do pipeline]
+
+Executar somente esta etapa:
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 4. Comentário didático do código
+
+**Chomp1d** — em convolução causal, o padding evita perder amostras à esquerda; o Chomp corta o excesso à direita para que a saída no instante t dependa só de entradas até t.
+
+**Dilatação vs pooling** — pooling encurta a sequência; dilatação **espalha** o filtro no tempo **sem encurtar**. Com janela de 120 amostras, isso ajuda a capturar o movimento inteiro.
+
+**Conexão residual** — out + x permite que o bloco aprenda incrementos; gradientes fluem melhor em redes profundas.
+
+**weight_norm** — normaliza pesos dos filtros; estabiliza treino em séries temporais.
+
+**Resolução constante (32, 64, 120)** — cada instante mantém um vetor de features; o AdaptiveAvgPool1d(1) resume a janela no final (como na CNN 1D).
+
+**Comparação integrada** — compare_cnn_vs_tcn() coloca lado a lado parâmetros e contexto efetivo.
+
+---
+
+## 5. Resultado do forward pass (modelo não treinado)
+
+| Métrica | Valor |
+|---|---|
+| Entrada | (32, 6, 120) |
+| Saída | (32,) |
+| Parâmetros | 84 961 |
+| Campo receptivo | **125 amostras (2,08 s)** |
+| Cobre janela inteira | **Sim** |
+
+**Evolução das shapes:**
+
+[diagrama omitido — ver scripts do pipeline]
+
+Predições ainda aleatórias — treino vem na Etapa 12.
+
+---
+
+## 6. Principais erros a evitar
+
+1. **Dilatações curtas demais** — com [1,2,4,8] o RF = 61 amostras (< 120); não cobre a janela inteira.
+2. **Confundir causal com offline** — aqui usamos TCN causal; para janelas completas offline, bidirecional ou não-causal também é opção (Etapa 14).
+3. **Assumir TCN > CNN 1D sempre** — compare no LOSO (Etapa 13); mais parâmetros podem overfitar com ~573 janelas de treino.
+4. **Esquecer Chomp1d** — sem ele, shapes temporais ficam desalinhadas.
+5. **Não parear dilatações com num_channels** — listas devem ter o mesmo comprimento.
+6. **Treinar agora sem loss/métricas** — Etapa 11 define MSE, Adam e MAE/RMSE/R².
+
+---
+
+## O que fica pronto após a Etapa 10
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+Quando quiser seguir, peça a **Etapa 11** — função de perda (MSE/MAE/Huber), otimizador Adam, learning rate e métricas de interpretação (MAE, RMSE, R², bias, erro percentual).
+
+[REDACTED]
+
+
+======================================================================
+ETAPA 11
+======================================================================
+
+# Etapa 11 — Função de perda, otimizador e métricas
+
+## 1. O conceito, de forma simples
+
+Treinar uma rede envolve duas coisas distintas:
+
+1. **Loss (perda)** — o que o modelo **otimiza** via gradiente (loss.backward())
+2. **Métricas** — o que você **interpreta e reporta** (MAE em cm, R², bias clínico)
+
+A loss guia o aprendizado; as métricas respondem: *“o erro é aceitável?”*
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 2. Por que isso importa no seu problema
+
+Regressão de amplitude Vicon a partir de IMU costuma ter:
+
+- erros ocasionais grandes (janelas atípicas)
+- alvo possivelmente **normalizado** (Etapa 6)
+- necessidade de reportar erro em **unidade clínica** (cm)
+
+| Loss | Comportamento | Quando usar |
+|---|---|---|
+| **MSE** | Penaliza erros grandes ao quadrado | Baseline; sensível a outliers |
+| **MAE (L1)** | Robusta, gradiente instável em 0 | Poucos outliers extremos |
+| **Huber** | Quadrática perto de 0, linear longe | **Boa candidata padrão** — robusta e suave |
+
+**Adam** + **weight decay** equilibram convergência e regularização — útil porque a TCN tem ~85 k parâmetros vs ~45 k da CNN 1D.
+
+---
+
+## 3. Código Python/PyTorch
+
+Módulo criado em pipeline/etapa11_loss_metrics.py.
+
+### Configuração de treino
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Loss e otimizador
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Métricas de interpretação
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Avaliar um DataLoader (sem treinar)
+
+[diagrama omitido — ver scripts do pipeline]
+
+Executar somente esta etapa:
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 4. Comentário didático do código
+
+**build_criterion** — encapsula a escolha de loss. Huber com delta=1.0 trata erros pequenos como MSE e grandes como MAE — adequado quando algumas janelas têm amplitude atípica.
+
+**build_optimizer** — Adam adapta a taxa por parâmetro. weight_decay=1e-4 penaliza pesos grandes (L2), reduzindo overfitting.
+
+**compute_regression_metrics**
+- **MAE** — erro médio na unidade do alvo
+- **RMSE** — como MSE, mas na mesma unidade (penaliza erros grandes)
+- **R²** — 1.0 = perfeito; 0 = baseline média; **negativo** = pior que prever a média (esperado antes do treino)
+- **Bias** — média de (pred − true); positivo = superestima
+- **MAPE** — erro percentual; cuidado quando amplitudes são muito pequenas
+
+**evaluate_loader** — agrega loss e métricas sobre todos os batches. Será reutilizado no loop de validação (Etapa 12).
+
+**Loss ≠ MAE** — Huber(2,04) e MAE(2,54) no modelo não treinado são valores diferentes na mesma escala; ambos são válidos, mas medem coisas distintas.
+
+---
+
+## 5. Resultado da demonstração
+
+**Exemplo ilustrativo (5 pontos fictícios):**
+
+| Métrica | Valor |
+|---|---|
+| MAE | 0,32 |
+| RMSE | 0,34 |
+| R² | 0,94 |
+| Bias | +0,12 |
+| MAPE | 12,4% |
+
+**TCN não treinada — fold LOSO (vicon escalado):**
+
+| | Treino | Validação |
+|---|---|---|
+| Loss (Huber) | 2,04 | 1,85 |
+| MAE | 2,54 | 2,35 |
+| RMSE | — | 2,36 |
+| R² | — | −314 (esperado: modelo aleatório) |
+| Bias | — | −2,35 |
+
+O R² muito negativo **antes do treino** é normal — confirma que as métricas funcionam e que o modelo ainda não aprendeu.
+
+---
+
+## 6. Principais erros a evitar
+
+1. **Reportar loss como MAE clínico** — são grandezas diferentes.
+2. **MAE em escala normalizada sem reverter** — use inverse_transform_target() para cm.
+3. **MAPE com amplitudes ~0** — distorce percentual; interprete com cuidado.
+4. **Só olhar R²** — complemente com MAE, bias e erro por sujeito.
+5. **MSE pura com outliers** — considere Huber (padrão do pipeline).
+6. **Learning rate alto demais** — comece com 1e-3; ajuste no LOSO (Etapa 14).
+7. **Esquecer model.eval() na validação** — BatchNorm se comporta diferente em treino vs eval.
+8. **Confundir métricas de treino com generalização** — val LOSO é a referência interna.
+
+---
+
+## O que fica pronto após a Etapa 11
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+Quando quiser seguir, peça a **Etapa 12** — loop de treino e validação de um único fold, early stopping, salvar melhor modelo e plotar curva de loss.
+
+[REDACTED]
+
+
+======================================================================
+ETAPA 12
+======================================================================
+
+# Etapa 12 — Treinamento de um único fold
+
+## 1. O conceito, de forma simples
+
+Até aqui você montou dados, modelo, loss e métricas. Agora roda o **loop de aprendizado** para **um fold LOSO** dentro dos 70% de desenvolvimento:
+
+[diagrama omitido — ver scripts do pipeline]
+
+Se a validação não melhorar por patience épocas, o treino para e restaura os **melhores pesos**.
+
+---
+
+## 2. Por que isso importa no seu problema
+
+Treinar **um fold por vez** antes do LOSO completo permite:
+
+| Objetivo | Benefício |
+|---|---|
+| Verificar se loss desce | Pipeline inteiro funciona |
+| Inspecionar curvas treino/val | Detectar overfitting cedo |
+| Early stopping | Evita memorizar sujeitos de treino |
+| Salvar checkpoint | Reprodutibilidade e Etapa 13 reutiliza o padrão |
+
+Nesta etapa usa-se **apenas sujeitos dev** (fold LOSO com val = 02). O **teste final (30%) continua intocado**.
+
+---
+
+## 3. Código Python/PyTorch
+
+Módulo criado em pipeline/etapa12_train_fold.py.
+
+### Loop de treino (uma época)
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Early stopping
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Treinar fold completo
+
+[diagrama omitido — ver scripts do pipeline]
+
+Executar somente esta etapa:
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 4. Comentário didático do código
+
+**prepare_loso_fold** — encadeia Etapas 5→6→7→8: split dev, normalização do fold, janelas, DataLoaders.
+
+**train_one_epoch** — model.train() ativa Dropout/BatchNorm em modo treino; zero_grad() evita acumular gradientes entre batches.
+
+**evaluate_loader** — model.eval() + @torch.no_grad() desliga gradiente na validação.
+
+**EarlyStopping** — monitora val_loss; salva state_dict do melhor modelo. Critério: **menor val_loss**, não MAE (MAE serve para interpretação).
+
+**Salvamentos**
+- checkpoints/etapa12_loso_val_02_best.pt — pesos + metadados
+- plots/etapa12_loss_loso_val_02.png — curvas loss e MAE
+- metrics/etapa12_loso_val_02_metrics.json — métricas finais
+- scalers/etapa12_loso_val_02_scaler.joblib — escalador do fold
+
+**plot_training_curves** — painel esquerdo: loss treino vs val; direito: MAE de validação; linha vertical na melhor época.
+
+---
+
+## 5. Resultado do treino real (fold val = sujeito 02)
+
+| Métrica | Antes (Etapa 11) | Depois (Época 14) |
+|---|---|---|
+| Val loss (Huber) | 1,85 | **0,017** |
+| Val MAE | 2,35 | **0,144** (vicon escalado) |
+| Val RMSE | 2,36 | **0,182** |
+| Épocas | — | 26 (early stop na 26, melhor na **14**) |
+
+Treino: **573 janelas** (18 sujeitos dev) | Val: **32 janelas** (sujeito 02)
+
+Arquivos gerados:
+- outputs/pipeline_dl/checkpoints/etapa12_loso_val_02_best.pt
+- outputs/pipeline_dl/plots/etapa12_loss_loso_val_02.png
+- outputs/pipeline_dl/metrics/etapa12_loso_val_02_metrics.json
+
+**Sobre R² negativo na validação:** com apenas 32 janelas de um único sujeito e alta variância local, R² pode ficar instável. MAE e RMSE são mais confiáveis neste fold pequeno. No LOSO completo (Etapa 13), agregando todos os sujeitos, R² ganha interpretação.
+
+---
+
+## 6. Principais erros a evitar
+
+1. **Treinar sem model.eval() na validação** — BatchNorm distorce métricas.
+2. **Escolher melhor modelo pelo train_loss** — use **val_loss** (early stopping).
+3. **Não salvar checkpoint** — perde melhor época após early stopping.
+4. **Incluir sujeito de teste final** — só grupo dev nesta etapa.
+5. **Confundir épocas executadas com melhor época** — aqui: 26 executadas, melhor na 14.
+6. **Reportar MAE escalado como cm** — aplique inverse_transform_target() do ScalerBundle.
+7. **Rodar LOSO completo agora** — isso é Etapa 13.
+8. **Ignorar curvas** — val_loss subindo enquanto train desce → overfitting.
+
+---
+
+## O que fica pronto após a Etapa 12
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+Quando quiser seguir, peça a **Etapa 13** — LOSO completo nos 19 sujeitos de desenvolvimento, métricas por sujeito e média ± desvio-padrão entre folds.
+
+[REDACTED]
+
+
+======================================================================
+ETAPA 14
+======================================================================
+
+# Etapa 14 — Escolha de hiperparâmetros (pronta para rodar depois)
+
+Script criado em pipeline/etapa14_hyperparameters.py. **Nada foi treinado agora** — só validei o modo --list.
+
+---
+
+## 1. O conceito, de forma simples
+
+Você já tem LOSO (Etapa 13) para medir generalização **dentro dos 70% dev**. A Etapa 14 **compara combinações de hiperparâmetros** com o mesmo protocolo e escolhe a que tem **menor MAE média** entre os folds.
+
+[diagrama omitido — ver scripts do pipeline]
+
+O **teste final (30%) continua intocado**.
+
+---
+
+## 2. O que entra na busca
+
+| Hiperparâmetro | O que testa |
+|---|---|
+| window_seconds | Quanto contexto temporal (1s, 2s, 3s) |
+| stride_seconds | Sobreposição entre janelas |
+| model_type | tcn vs cnn1d |
+| loss | Huber vs MSE |
+| learning_rate | Velocidade de aprendizado |
+| batch_size | Estabilidade do gradiente |
+
+**Critério de seleção:** menor **MAE média** no LOSO dev (não loss de treino).
+
+Grid padrão com **8 trials** (tcn_baseline, cnn1d, win_1s, win_3s, loss_mse, lr_5e4, batch_16, stride_05).
+
+---
+
+## 3. Como rodar no futuro
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 4. Saídas geradas ao concluir
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## 5. Fluxo recomendado
+
+1. **Etapa 13** (opcional) — LOSO baseline com config padrão  
+2. **Etapa 14 --quick-folds 3** — triagem rápida  
+3. **Etapa 14 --trials vencedor** — revalidar vencedor com 19 folds  
+4. **Etapa 15** — treino final nos 70% + teste nos 30% com best_hyperparameters.json
+
+---
+
+## 6. Erros a evitar
+
+1. **Usar teste final para escolher hiperparâmetros** — proibido até Etapa 15  
+2. **Confiar só em --quick-folds** — revalide o vencedor com LOSO completo  
+3. **Comparar trials com números de folds diferentes** — compare MAE só com mesmo N de folds  
+4. **Grid enorme sem triagem** — comece com --quick-folds 3  
+5. **Ignorar best_hyperparameters.json** — Etapa 15 deve carregar esse arquivo
+
+---
+
+Quando quiser, peça a **Etapa 15** (treino final nos 70% + avaliação única nos 30% intocados) — também posso deixar pronta para rodar depois.
+
+[REDACTED]
+
+
+======================================================================
+ETAPA 15
+======================================================================
+
+# Etapa 15 — Treino final + teste intocado (pronta para rodar depois)
+
+Script criado em pipeline/etapa15_final_test.py. **Nada foi treinado agora** — só validei o modo --list.
+
+---
+
+## O que faz
+
+1. **Scaler** ajustado só nos **19 sujeitos dev** (70%)
+2. **Teste (8 sujeitos, 30%)** recebe apenas transform() — uma única vez
+3. **Treino final** em **605 janelas** dev (100%, sem validação interna)
+4. **Avaliação única** em **243 janelas** de teste
+5. Métricas em escala normalizada **e em cm** (via inverse_transform)
+6. Salva modelo, scaler, predições e métricas
+
+---
+
+## Prévia do split (--list)
+
+| Grupo | Sujeitos | Janelas |
+|---|---|---|
+| Dev (treino) | 19 | 605 |
+| Teste (intocado) | 01, 04, 06, 10, 11, 23, 24, 26 | 243 |
+
+Épocas --epochs auto: mediana do LOSO Etapa 13 = **6** (pode sobrescrever com --epochs 14 se preferir).
+
+---
+
+## Como rodar no futuro
+
+[diagrama omitido — ver scripts do pipeline]
+
+---
+
+## Saídas geradas ao concluir
+
+[diagrama omitido — ver scripts do pipeline]
+
+O CSV de predições inclui: subject_id, y_true_cm, y_pred_cm, error_cm.
+
+---
+
+## Regras importantes
+
+- **Não reajuste** hiperparâmetros depois de olhar o teste
+- Rode a **Etapa 14** antes se quiser comparar configs (--use-best-hparams)
+- O LOSO da Etapa 13 já está pronto como baseline dev (**MAE ≈ 0,21** normalizado)
+
+---
+
+Quando quiser, peça a **Etapa 16** (visualização dos resultados) — também posso deixar pronta para rodar depois.
+
+[REDACTED]
+
+
+======================================================================
+ETAPA 16
+======================================================================
+
+# Etapa 16 — Visualização dos resultados
+
+Script pronto em pipeline/etapa16_visualize.py. Não executei a geração completa de gráficos (conforme sua preferência de rodar depois); só validei com --list.
+
+### O que faz
+
+Gera figuras em outputs/pipeline_dl/plots/ a partir de:
+
+| Fonte | Pré-requisito | Gráficos |
+|-------|---------------|----------|
+| --source test | Etapa 15 (etapa15_test_predictions.csv) | true vs pred, Bland-Altman, resíduos, MAE por sujeito/amplitude, timelines |
+| --source loso | Etapa 13 (etapa13_loso_per_subject.csv) | MAE por sujeito no dev (LOSO) |
+
+**Estado atual:**
+- LOSO (Etapa 13): disponível — pode gerar loso_per_subject agora
+- Teste final (Etapa 15): ainda não — precisa rodar Etapa 15 antes
+
+### Comandos (para rodar depois)
+
+[diagrama omitido — ver scripts do pipeline]
+
+### Ordem recomendada
+
+1. Etapa 14 — hiperparâmetros (opcional, melhora o modelo final)
+2. Etapa 15 — treino final + predições no teste
+3. **Etapa 16** — visualização com --source test (e opcionalmente --source loso)
+
+### Como interpretar (resumo)
+
+- **True vs pred:** pontos perto da diagonal y=x = boa predição
+- **Bland-Altman:** bias e se o erro aumenta com a amplitude
+- **Resíduos:** centrados em zero = sem viés sistemático
+- **MAE por sujeito:** quem generaliza mal no teste/LOSO
+- **Timeline:** se o modelo acompanha a dinâmica ou só a média
+
+Quer que eu implemente a **Etapa 17** (baselines: dupla integração, ML clássico) ou prefere executar 14→15→16 quando estiver pronto?
+
+[REDACTED]
